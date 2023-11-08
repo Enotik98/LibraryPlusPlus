@@ -1,32 +1,28 @@
 <template>
   <router-link to="/registration" />
-<!--  <nav>-->
-
-<!--    <router-link to="/">Home</router-link> |-->
-<!--    <router-link to="/about">About</router-link>-->
-<!--  </nav>-->
   <router-view/>
 </template>
 
 <style>
+:root {
+  --blue: #011AFB;
+  --background-blue: rgba(54, 74, 255, 0.10);
+  --blue-opacity: rgba(54, 74, 255, 0.75);
+
+  height: 100vh;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, sans-serif;
+  /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /*height: 100vh;*/
+  /*-moz-osx-font-smoothing: grayscale;*/
   /*text-align: center;*/
   /*color: #2c3e50;*/
 }
-
-/*nav {*/
-/*  padding: 30px;*/
-/*}*/
-
-/*nav a {*/
-/*  font-weight: bold;*/
-/*  color: #2c3e50;*/
-/*}*/
-
-/*nav a.router-link-exact-active {*/
-/*  color: #42b983;*/
-/*}*/
 </style>

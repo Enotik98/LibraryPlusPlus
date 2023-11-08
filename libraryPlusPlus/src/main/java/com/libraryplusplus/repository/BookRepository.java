@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BookRepository extends JpaRepository<Book, Integer> {
     Book findById(int id);
     Book findByTitle(String name);
+
 }

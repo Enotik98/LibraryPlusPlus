@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Table(name = "books", schema = "public")
@@ -32,5 +33,17 @@ public class Book {
     private int quantity;
     @Column(name = "about")
     private String about ; //type for text
+    @Temporal(TemporalType.DATE)
+    @Column(name = "add_date")
+    private Date add_date;
+    @Column(name = "path_img")
+    private String path_img;
+
+    @PrePersist
+    public void setDefaultValues(){
+        if (add_date == null){
+            add_date = new Date();
+        }
+    }
 
 }

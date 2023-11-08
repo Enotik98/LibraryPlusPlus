@@ -1,0 +1,82 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="qr-code-svgrepo-com 1" clip-path="url(#clip0_224_560)">
+<g id="Group">
+<path id="Vector" d="M160 92H152V112H160V92Z" fill="black"/>
+<path id="Vector_2" d="M176 92H168V112H176V92Z" fill="black"/>
+<path id="Vector_3" d="M160 120H152V128H160V120Z" fill="black"/>
+<path id="Vector_4" d="M176 120H168V128H176V120Z" fill="black"/>
+<path id="Vector_5" d="M132 136H124V144H132V136Z" fill="black"/>
+<path id="Vector_6" d="M112 216H104V224H112V216Z" fill="black"/>
+<path id="Vector_7" d="M176 136H168V144H176V136Z" fill="black"/>
+<path id="Vector_8" d="M160 152H152V160H160V152Z" fill="black"/>
+<path id="Vector_9" d="M176 152H168V160H176V152Z" fill="black"/>
+<path id="Vector_10" d="M8 8H20V0H4C1.792 0 0 1.792 0 4V20H8V8Z" fill="black"/>
+<path id="Vector_11" d="M252 0H236V8H248V20H256V4C256 1.792 254.208 0 252 0Z" fill="black"/>
+<path id="Vector_12" d="M8 236H0V252C0 254.208 1.792 256 4 256H20V248H8V236Z" fill="black"/>
+<path id="Vector_13" d="M248 248H236V256H252C254.208 256 256 254.208 256 252V236H248V248Z" fill="black"/>
+<path id="Vector_14" d="M16 20V68C16 70.208 17.792 72 20 72H68C70.208 72 72 70.208 72 68V20C72 17.792 70.208 16 68 16H20C17.792 16 16 17.792 16 20ZM24 24H64V64H24V24Z" fill="black"/>
+<path id="Vector_15" d="M52 32H36C33.792 32 32 33.792 32 36V52C32 54.208 33.792 56 36 56H52C54.208 56 56 54.208 56 52V36C56 33.792 54.208 32 52 32ZM48 48H40V40H48V48Z" fill="black"/>
+<path id="Vector_16" d="M188 72H236C238.208 72 240 70.208 240 68V20C240 17.792 238.208 16 236 16H188C185.792 16 184 17.792 184 20V68C184 70.208 185.792 72 188 72ZM192 24H232V64H192V24Z" fill="black"/>
+<path id="Vector_17" d="M220 32H204C201.792 32 200 33.792 200 36V52C200 54.208 201.792 56 204 56H220C222.208 56 224 54.208 224 52V36C224 33.792 222.208 32 220 32ZM216 48H208V40H216V48Z" fill="black"/>
+<path id="Vector_18" d="M68 184H20C17.792 184 16 185.792 16 188V236C16 238.208 17.792 240 20 240H68C70.208 240 72 238.208 72 236V188C72 185.792 70.208 184 68 184ZM64 232H24V192H64V232Z" fill="black"/>
+<path id="Vector_19" d="M36 224H52C54.208 224 56 222.208 56 220V204C56 201.792 54.208 200 52 200H36C33.792 200 32 201.792 32 204V220C32 222.208 33.792 224 36 224ZM40 208H48V216H40V208Z" fill="black"/>
+<path id="Vector_20" d="M176 76H148V28H140V80C140 82.208 141.792 84 144 84H176V76Z" fill="black"/>
+<path id="Vector_21" d="M116 48H88V56H116V48Z" fill="black"/>
+<path id="Vector_22" d="M132 32H104V40H132V32Z" fill="black"/>
+<path id="Vector_23" d="M24 76H16V112H24V76Z" fill="black"/>
+<path id="Vector_24" d="M72 100H32V108H68V124H76V104C76 101.792 74.208 100 72 100Z" fill="black"/>
+<path id="Vector_25" d="M44 80H36V88H44V80Z" fill="black"/>
+<path id="Vector_26" d="M92 72H84V104H92V72Z" fill="black"/>
+<path id="Vector_27" d="M120 112H84V120H120V112Z" fill="black"/>
+<path id="Vector_28" d="M244 116H236V156H224V164H240C242.208 164 244 162.208 244 160V116Z" fill="black"/>
+<path id="Vector_29" d="M112 72H104V80H112V72Z" fill="black"/>
+<path id="Vector_30" d="M24 132H16V164H24V132Z" fill="black"/>
+<path id="Vector_31" d="M52 168H16V176H52V168Z" fill="black"/>
+<path id="Vector_32" d="M200 112H208V96C208 93.792 206.208 92 204 92H184V100H200V112Z" fill="black"/>
+<path id="Vector_33" d="M44 132H36V140H44V132Z" fill="black"/>
+<path id="Vector_34" d="M88 128H80V160H88V128Z" fill="black"/>
+<path id="Vector_35" d="M116 168H80V176H116V168Z" fill="black"/>
+<path id="Vector_36" d="M68 152H32V160H68V152Z" fill="black"/>
+<path id="Vector_37" d="M92 208H84V224H92V208Z" fill="black"/>
+<path id="Vector_38" d="M116 192H80V200H116V192Z" fill="black"/>
+<path id="Vector_39" d="M144 176V156C144 153.792 142.208 152 140 152H100V160H136V176H144Z" fill="black"/>
+<path id="Vector_40" d="M112 128H104V136H112V128Z" fill="black"/>
+<path id="Vector_41" d="M68 136H60V144H68V136Z" fill="black"/>
+<path id="Vector_42" d="M244 212H236V240H244V212Z" fill="black"/>
+<path id="Vector_43" d="M228 232H216V240H228V232Z" fill="black"/>
+<path id="Vector_44" d="M224 208H216V224H224V208Z" fill="black"/>
+<path id="Vector_45" d="M244 176C244 173.792 242.208 172 240 172H196V180H236V204H244V176Z" fill="black"/>
+<path id="Vector_46" d="M192 224V204C192 201.792 190.208 200 188 200H144V208H184V224H192Z" fill="black"/>
+<path id="Vector_47" d="M228 188H200V196H228V188Z" fill="black"/>
+<path id="Vector_48" d="M108 232H80V240H108V232Z" fill="black"/>
+<path id="Vector_49" d="M128 204H120V240H128V204Z" fill="black"/>
+<path id="Vector_50" d="M144 184H128V192H144V184Z" fill="black"/>
+<path id="Vector_51" d="M188 144H208V136H192V112H184V140C184 142.208 185.792 144 188 144Z" fill="black"/>
+<path id="Vector_52" d="M220 120H200V128H220V120Z" fill="black"/>
+<path id="Vector_53" d="M228 80H216V88H228V80Z" fill="black"/>
+<path id="Vector_54" d="M244 80H236V100H244V80Z" fill="black"/>
+<path id="Vector_55" d="M224 100H216V108H224V100Z" fill="black"/>
+<path id="Vector_56" d="M156 68H172C174.208 68 176 66.208 176 64V12H168V60H156V68Z" fill="black"/>
+<path id="Vector_57" d="M96 20H156V12H92C89.792 12 88 13.792 88 16V36H96V20Z" fill="black"/>
+<path id="Vector_58" d="M100 96H128C130.208 96 132 94.208 132 92V60H124V88H100V96Z" fill="black"/>
+<path id="Vector_59" d="M144 92H136V108H144V92Z" fill="black"/>
+<path id="Vector_60" d="M172 216H144V224H172V216Z" fill="black"/>
+<path id="Vector_61" d="M180 232H144V240H180V232Z" fill="black"/>
+<path id="Vector_62" d="M200 232H192V240H204C206.208 240 208 238.208 208 236V204H200V232Z" fill="black"/>
+<path id="Vector_63" d="M72 168H64V176H72V168Z" fill="black"/>
+<path id="Vector_64" d="M172 168H156V176H172V168Z" fill="black"/>
+<path id="Vector_65" d="M192 152H184V164H192V152Z" fill="black"/>
+<path id="Vector_66" d="M188 172H180V180H188V172Z" fill="black"/>
+<path id="Vector_67" d="M168 184H156V192H168V184Z" fill="black"/>
+<path id="Vector_68" d="M208 152H200V160H208V152Z" fill="black"/>
+<path id="Vector_69" d="M228 136H216V144H228V136Z" fill="black"/>
+<path id="Vector_70" d="M160 136H140V144H160V136Z" fill="black"/>
+<path id="Vector_71" d="M144 116H136V128H144V116Z" fill="black"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_224_560">
+<rect width="256" height="256" fill="white"/>
+</clipPath>
+</defs>
+</svg>

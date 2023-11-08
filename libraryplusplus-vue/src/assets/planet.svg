@@ -1,0 +1,10 @@
+<svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="planet">
+<path id="Vector" d="M12.862 6.49995C12.862 3.22436 10.2065 0.56897 6.93098 0.56897C3.65539 0.56897 1 3.22436 1 6.49995C1 9.77552 3.65539 12.4309 6.93098 12.4309" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M7.52405 0.598267C7.52405 0.598267 9.30334 2.94137 9.30334 6.49994" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M6.33777 12.4017C6.33777 12.4017 4.55847 10.0585 4.55847 6.49994C4.55847 2.94137 6.33777 0.598267 6.33777 0.598267" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M1.37354 8.57581H6.93108" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_5" d="M1.37354 4.42407H12.4886" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_6" fill-rule="evenodd" clip-rule="evenodd" d="M12.79 10.0095C13.0829 10.1897 13.0649 10.6281 12.7632 10.6624L11.241 10.8349L10.5582 12.2063C10.4229 12.4781 10.0047 12.345 9.93556 12.0082L9.19104 8.38084C9.13262 8.09615 9.38848 7.91697 9.63598 8.06928L12.79 10.0095Z" stroke="black"/>
+</g>
+</svg>

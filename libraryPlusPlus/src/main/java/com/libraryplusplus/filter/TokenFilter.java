@@ -19,7 +19,7 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = extractToken(request);
-        System.out.println(token);
+        System.out.println("token " + token);
         if (token != null) {
             if (TokenUtils.validateToken(token)) {
                 Claims claimsUser = TokenUtils.getClaimsFromToken(token);
@@ -29,8 +29,6 @@ public class TokenFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-//            response.put("id", userInfo.get("id").toString());
-//            response.put("role", (String) userInfo.get("role"));
         }
         filterChain.doFilter(request, response);
     }

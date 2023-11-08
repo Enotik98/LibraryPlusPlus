@@ -6,7 +6,13 @@ import com.libraryplusplus.entity.Status;
 import com.libraryplusplus.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -14,8 +20,12 @@ import java.util.Date;
 public class OrderDTO {
     private int id;
     private int user_id;
+    @NotNull(message = "Book_id is empty")
     private int book_id;
     private Date orderDate;
+    @NotNull
+    @Future
+    @Temporal(TemporalType.DATE)
     private Date return_date;
     private Status status;
     private Boolean returnedLate;

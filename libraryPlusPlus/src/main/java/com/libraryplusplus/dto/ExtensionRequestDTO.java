@@ -7,17 +7,26 @@ import com.libraryplusplus.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 @Data
 @NoArgsConstructor
 public class ExtensionRequestDTO {
     private int id;
+    @NotNull(message = "Order id is empty")
     private int order_id;
     private int user_id;
     private Date request_date;
     private RequestStatus status;
+    @NotNull
+    @Future
+    @Temporal(TemporalType.DATE)
     private Date new_return_date;
-    private String response_message;
+    private String message;
 
     public static ExtensionRequestDTO ConvertToDTO(ExtensionRequest request){
         ExtensionRequestDTO dto = new ExtensionRequestDTO();
@@ -27,7 +36,7 @@ public class ExtensionRequestDTO {
         dto.setRequest_date(request.getRequest_date());
         dto.setStatus(request.getStatus());
         dto.setNew_return_date(request.getNew_return_date());
-        dto.setResponse_message(request.getMessage());
+        dto.setMessage(request.getMessage());
         return dto;
     }
     public ExtensionRequest ConvertToExtensionRequest(Order order, User user){
@@ -38,7 +47,7 @@ public class ExtensionRequestDTO {
         extensionRequest.setRequest_date(this.getRequest_date());
         extensionRequest.setStatus(this.getStatus());
         extensionRequest.setNew_return_date(this.getNew_return_date());
-        extensionRequest.setMessage(this.getResponse_message());
+        extensionRequest.setMessage(this.getMessage());
         return extensionRequest;
     }
 }

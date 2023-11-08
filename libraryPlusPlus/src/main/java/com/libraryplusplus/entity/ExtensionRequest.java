@@ -40,7 +40,7 @@ public class ExtensionRequest {
     @Column(name = "new_return_date")
     private Date new_return_date;
 
-    @Column(name = "response_message")
+    @Column(name = "message")
     private String message;
 
     @PrePersist

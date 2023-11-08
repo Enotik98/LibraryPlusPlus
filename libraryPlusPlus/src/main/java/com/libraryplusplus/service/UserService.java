@@ -1,10 +1,13 @@
 package com.libraryplusplus.service;
 
+import com.libraryplusplus.dto.AuthDTO;
 import com.libraryplusplus.dto.UserDTO;
 import com.libraryplusplus.entity.Role;
 import com.libraryplusplus.entity.User;
 import com.libraryplusplus.repository.UserRepository;
+import com.libraryplusplus.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,62 +19,110 @@ public class UserService {
     UserRepository userRepository;
 
     public List<UserDTO> getAllUser() {
-        List<User> users = userRepository.findAll();
-        System.out.println("users: " + users);
-        List<UserDTO> result = new ArrayList<>();
-        for (User user : users) {
-            result.add(UserDTO.ConvertToDTO(user));
+        try {
+            List<User> users = userRepository.findAll();
+            List<UserDTO> result = new ArrayList<>();
+            for (User user : users) {
+                result.add(UserDTO.ConvertToDTO(user));
+            }
+            return result;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return result;
     }
-    public User getUserLogin(String email){
-        return userRepository.findByEmail(email);
+    public UserDTO getUserById(int id){
+        try{
+            User user = userRepository.findById(id);
+            return UserDTO.ConvertToDTO(user);
+        }catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
-    public boolean addUser(UserDTO userDTO) {
+    public User getByEmail(String email) {
+        try {
+            return userRepository.findByEmail(email);
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public void addUser(AuthDTO authDTO) {
         //add code for search duplicate user
-        User exUser = userRepository.findByEmail(userDTO.getEmail());
-        if (exUser != null) {
-            return false;
+        try {
+            User exUser = userRepository.findByEmail(authDTO.getEmail());
+            if (exUser != null) {
+                //409
+                throw new CustomException(HttpStatus.CONFLICT, "An account with such email already exists");
+            }
+            User user = authDTO.ConvertToUser();
+            userRepository.save(user);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        User user = userDTO.ConvertToUser();
-        userRepository.save(user);
-        return true;
     }
 
-    public boolean updateUserRole(int id, Role role) {
-        User user = userRepository.findById(id);
-        if (user == null) {
-            return false;
+    public void updateUserRole(int id, Role role) {
+        try {
+            User user = userRepository.findById(id);
+            if (user == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
+            }
+            user.setRole(role);
+            userRepository.save(user);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        user.setRole(role);
-        userRepository.save(user);
-        return true;
-    }
-    public boolean updateRestrictions(int id, boolean sanction, boolean blocked){
-        User user = userRepository.findById(id);
-        if (user == null){
-            return false;
-        }
-        user.setIsBlocked(blocked);
-        user.setIsSanctions(sanction);
-        userRepository.save(user);
-        return true;
     }
 
-    public boolean updateUser(UserDTO userDTO) {
-        User exUser = userRepository.findById(userDTO.getId());
-        if (exUser != null) {
-            return false;
+    public void updateRestrictions(int id, boolean sanction, boolean blocked) {
+        try {
+            User user = userRepository.findById(id);
+            if (user == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
+            }
+            user.setIsBlocked(blocked);
+            user.setIsSanctions(sanction);
+            userRepository.save(user);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        User user = userDTO.ConvertToUser();
-        userRepository.save(user);
-        return true;
     }
 
-    public boolean deleteUser(int id) {
-        userRepository.deleteById(id);
-        return true;
+    public void updateUser(UserDTO userDTO) {
+        try {
+            User exUser = userRepository.findById(userDTO.getId());
+            if (exUser == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
+            }
+            User user = userDTO.ConvertToUser(exUser);
+            System.out.println(user);
+            userRepository.save(user);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public void deleteUser(int id) {
+        try {
+            //add check order with status
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    public boolean isUserHaveTicket(User user) {
+        return user.getFirst_name() == null || user.getLast_name() == null ||
+                user.getPhone() == null || user.getAddress() == null;
     }
 
 

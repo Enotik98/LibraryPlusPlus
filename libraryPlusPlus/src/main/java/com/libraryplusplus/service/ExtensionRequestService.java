@@ -8,7 +8,9 @@ import com.libraryplusplus.entity.User;
 import com.libraryplusplus.repository.ExtensionRequestRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.repository.UserRepository;
+import com.libraryplusplus.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,45 +24,72 @@ public class ExtensionRequestService {
     UserRepository userRepository;
     @Autowired
     OrderRepository orderRepository;
-    public List<ExtensionRequestDTO> findAllRequest(){
-        List<ExtensionRequest> requests = extensionRequestRepository.findAll();
-        List<ExtensionRequestDTO> result = new ArrayList<>();
-        for(ExtensionRequest request : requests){
-            result.add(ExtensionRequestDTO.ConvertToDTO(request));
+
+    public List<ExtensionRequestDTO> findAllRequest() {
+        try {
+            List<ExtensionRequest> requests = extensionRequestRepository.findAll();
+            List<ExtensionRequestDTO> result = new ArrayList<>();
+            for (ExtensionRequest request : requests) {
+                result.add(ExtensionRequestDTO.ConvertToDTO(request));
+            }
+            return result;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return result;
     }
 
-    public boolean addExtensionRequest(ExtensionRequestDTO extensionRequestDTO){
-        User user = userRepository.findById(extensionRequestDTO.getUser_id());
-        Order order = orderRepository.findById(extensionRequestDTO.getOrder_id());
-        if (user == null || order == null){
-            return false;
-        }else {
+    public void addExtensionRequest(ExtensionRequestDTO extensionRequestDTO) {
+        try {
+            User user = userRepository.findById(extensionRequestDTO.getUser_id());
+            Order order = orderRepository.findById(extensionRequestDTO.getOrder_id());
+            if (user == null || order == null) {
+                throw new CustomException(HttpStatus.BAD_REQUEST, "User or Order not found");
+            }
+            ExtensionRequest exRequest = extensionRequestRepository.findByUserAndOrder(user, order);
+            if (exRequest != null){
+                throw new CustomException(HttpStatus.CONFLICT, "Such a request already exists");
+            }
             ExtensionRequest request = extensionRequestDTO.ConvertToExtensionRequest(order, user);
             extensionRequestRepository.save(request);
-            return true;
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-    public boolean updateExtensionRequest(ExtensionRequestDTO extensionRequestDTO){
-        ExtensionRequest exRequest = extensionRequestRepository.findById(extensionRequestDTO.getId());
-        if (exRequest == null && exRequest.getOrder() != null && exRequest.getUser() != null){
-            return false;
-        }else {
-            if (exRequest.getStatus().equals(extensionRequestDTO.getStatus())){
-                return true;
-            }else {
-                exRequest.setStatus(extensionRequestDTO.getStatus());
-                exRequest.setNew_return_date(extensionRequestDTO.getNew_return_date());
-                exRequest.setMessage(extensionRequestDTO.getResponse_message());
-                if (extensionRequestDTO.getStatus().equals(RequestStatus.APPROVED)) {
-                    Order order = orderRepository.findById(extensionRequestDTO.getOrder_id());
-                    order.setReturn_date(extensionRequestDTO.getNew_return_date());
-                    orderRepository.save(order);
+
+    public void updateExtensionRequest(ExtensionRequestDTO extensionRequestDTO) {
+        try {
+            ExtensionRequest exRequest = extensionRequestRepository.findById(extensionRequestDTO.getId());
+            if (exRequest == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "Request not found!");
+            } else {
+                if (extensionRequestDTO.getUser_id() == exRequest.getUser().getId() || extensionRequestDTO.getOrder_id() == exRequest.getOrder().getId()) {
+                    throw new CustomException(HttpStatus.NOT_FOUND, "User id or order id doesn't match");
+                }
+                if (exRequest.getStatus().equals(extensionRequestDTO.getStatus())) {
+                    throw new CustomException(HttpStatus.OK, "The status hasn't changed");
+                } else {
+                    exRequest.setStatus(extensionRequestDTO.getStatus());
+                    exRequest.setNew_return_date(extensionRequestDTO.getNew_return_date());
+                    exRequest.setMessage(extensionRequestDTO.getMessage());
+                    if (extensionRequestDTO.getStatus().equals(RequestStatus.APPROVED)) {
+                        Order order = orderRepository.findById(extensionRequestDTO.getOrder_id());
+                        if (exRequest.getNew_return_date().after(order.getReturn_date())) {
+                            order.setReturn_date(extensionRequestDTO.getNew_return_date());
+                            orderRepository.save(order);
+                        } else {
+                            throw new CustomException(HttpStatus.NOT_FOUND, "The new date is incorrect");
+                        }
+                    }
+                    extensionRequestRepository.save(exRequest);
                 }
             }
+        } catch (CustomException e) {
+            throw new CustomException(e.getStatus(), e.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return true;
     }
 
 }

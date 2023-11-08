@@ -56,7 +56,7 @@ public class Order {
             return_date = calendar.getTime();
         }
         if (status == null){
-            status = Status.CHECKOUT;
+            status = Status.AWAITING;
         }
     }
 

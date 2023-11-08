@@ -2,14 +2,13 @@ package com.libraryplusplus.service;
 
 import com.libraryplusplus.dto.FullOrderDTO;
 import com.libraryplusplus.dto.OrderDTO;
-import com.libraryplusplus.entity.Book;
-import com.libraryplusplus.entity.Order;
-import com.libraryplusplus.entity.Status;
-import com.libraryplusplus.entity.User;
+import com.libraryplusplus.entity.*;
 import com.libraryplusplus.repository.BookRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.repository.UserRepository;
+import com.libraryplusplus.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,87 +23,134 @@ public class OrderService {
     UserRepository userRepository;
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    UserService userService;
+    @Autowired
+    BookService bookService;
+    @Autowired
+    LostBookService lostBookService;
 
     public List<FullOrderDTO> findAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        List<FullOrderDTO> result = new ArrayList<>();
-        for (Order order : orders) {
-            result.add(FullOrderDTO.ConvertToDTO(order));
+        try {
+            List<Order> orders = orderRepository.findAll();
+            List<FullOrderDTO> result = new ArrayList<>();
+            for (Order order : orders) {
+                result.add(FullOrderDTO.ConvertToDTO(order));
+            }
+            return result;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return result;
     }
+    public List<FullOrderDTO> findAllUserOrders(int user_id){
+        try {
+            User user = userRepository.findById(user_id);
+            List<Order> orders = orderRepository.findAllByUser(user);
+            List<FullOrderDTO> result = new ArrayList<>();
+            for (Order order : orders) {
+                result.add(FullOrderDTO.ConvertToDTOWithoutUser(order));
+            }
+            return result;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 
     public Order findOrderById(int id) {
-        return orderRepository.findById(id);
+        try {
+            return orderRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
-    public String addOrder(OrderDTO orderDTO) {
-
-        User user = userRepository.findById(orderDTO.getUser_id());
-        if (user.getIsSanctions()){
-            return "your account has sanctions!";
-        }
-
-        Book book = bookRepository.findById(orderDTO.getBook_id());
-        Order order = orderDTO.ConvertToOrder(user, book);
-        int quantity = book.getQuantity();
-        //add booking
-        if (quantity == 0) {
-            return "error ";
-        } else {
-            quantity--;
-            book.setQuantity(quantity);
-            bookRepository.save(book);
-
+    public void addOrder(OrderDTO orderDTO) {
+        try {
+            User user = userRepository.findById(orderDTO.getUser_id());
+            if (user.getIsSanctions()) {
+                throw new CustomException(HttpStatus.FORBIDDEN, "You have sanctions, please contact the administrator for detail information");
+            }
+            if (userService.isUserHaveTicket(user)) {
+                throw new CustomException(HttpStatus.FORBIDDEN, "We don't have a generated electronic library card. Please, go to the profile");
+            }
+            Book book = bookRepository.findById(orderDTO.getBook_id());
+            if (!bookService.isAvailable(book)) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "There aren't copies available to order");
+            }
+            Order order = orderDTO.ConvertToOrder(user, book);
+            order.setStatus(Status.AWAITING);
             orderRepository.save(order);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return "add successful";
     }
 
-    public boolean changeStatus(int id, Status status) {
-        Order order = orderRepository.findById(id);
-        if (order.getStatus().equals(status)) {
-            return false;
+    public void changeStatus(int id, Status status) {
+        try {
+            Order order = orderRepository.findById(id);
+            if (order.getStatus().equals(status)) {
+                throw new CustomException(HttpStatus.OK, "The status hasn't been changed");
+            }
+            if (status.equals(Status.RETURNED)) {
+                Date currentDate = new Date();
+                order.setReturnedLate(currentDate.after(order.getReturn_date()));
+            }
+            if (status.equals(Status.LOST)) {
+                lostBookService.addLostBook(order.getId());
+            }
+            order.setStatus(status);
+            orderRepository.save(order);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        if (status.equals(Status.RETURNED)) {
-            Date currentDate = new Date();
-            order.setReturnedLate(currentDate.after(order.getReturn_date()));
-
-            Book book = bookRepository.findById(order.getBook().getId());
-            int count = book.getQuantity() + 1;
-            book.setQuantity(count);
-            bookRepository.save(book);
-        }
-        order.setStatus(status);
-        orderRepository.save(order);
-        return true;
     }
 
-    public boolean updateOrder(OrderDTO orderDTO) {
-        Order order = orderRepository.findById(orderDTO.getId());
-        if (order == null) {
-            return false;
+    public void updateOrder(OrderDTO orderDTO) {
+        try {
+            Order order = orderRepository.findById(orderDTO.getId());
+            if (order == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "The order wasn't found");
+            }
+            if (order.getUser().getId() != orderDTO.getUser_id() || order.getBook().getId() != orderDTO.getBook_id()){
+                throw new CustomException(HttpStatus.NOT_FOUND, "User id or Book id doesn't match");
+            }
+            if (orderDTO.getOrderDate() != null) {
+                order.setOrderDate(orderDTO.getOrderDate());
+            }
+            if (orderDTO.getReturn_date() != null) {
+                order.setReturn_date(orderDTO.getReturn_date());
+            }
+            if (orderDTO.getReturnedLate() != null) {
+                order.setReturn_date(orderDTO.getReturn_date());
+            }
+            orderRepository.save(order);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        if (orderDTO.getOrderDate() != null) {
-            order.setOrderDate(orderDTO.getOrderDate());
-        }
-        if (orderDTO.getReturn_date() != null) {
-            order.setReturn_date(orderDTO.getReturn_date());
-        }
-        if (orderDTO.getReturnedLate() != null) {
-            order.setReturn_date(orderDTO.getReturn_date());
-        }
-        orderRepository.save(order);
-        return true;
     }
 
-    public boolean deleteOrder(int id) {
-        Order order = orderRepository.findById(id);
-        if (order.getStatus().equals(Status.CHECKOUT)) {
+    public void deleteOrder(int id, int user_id) {
+        try {
+            Order order = orderRepository.findById(id);
+            User user = userRepository.findById(user_id);
+            if (order.getUser().getId() != user_id || !user.getRole().equals(Role.LIBRARIAN)){
+                throw new CustomException(HttpStatus.FORBIDDEN, "You can't cancel an order");
+            }
+            if (!order.getStatus().equals(Status.AWAITING)) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "The order can't be canceled");
+            }
             orderRepository.deleteById(id);
-            return true;
-        }else {
-            return false;
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

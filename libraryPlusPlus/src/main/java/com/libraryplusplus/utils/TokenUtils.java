@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TokenUtils {
     private static final String SECRET_KEY = "my-secret-cubic-top-token-library-plus-plus-key";
-    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 5 * 60 * 1000; //1 min
+    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; //60 min
 
     public static String generateAccessToken(int id, Role role) {
         Map<String, Object> claims = new HashMap<>();

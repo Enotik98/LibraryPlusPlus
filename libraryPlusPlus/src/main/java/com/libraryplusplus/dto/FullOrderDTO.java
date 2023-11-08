@@ -30,5 +30,16 @@ public class FullOrderDTO {
         dto.setReturnedLate(order.getReturnedLate());
         return dto;
     }
+    public static FullOrderDTO ConvertToDTOWithoutUser(Order order){
+        FullOrderDTO dto = new FullOrderDTO();
+        dto.setId(order.getId());
+        dto.setBook(order.getBook());
+//        dto.setUser(order.getUser());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setReturn_date(order.getReturn_date());
+        dto.setStatus(order.getStatus());
+        dto.setReturnedLate(order.getReturnedLate());
+        return dto;
+    }
     //in user delete password
 }
