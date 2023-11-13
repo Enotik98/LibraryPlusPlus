@@ -1,6 +1,8 @@
 package com.libraryplusplus.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.libraryplusplus.entity.Book;
+import com.libraryplusplus.utils.CapitalizeDeserializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +16,13 @@ import java.util.Date;
 public class BookDTO {
     private int id;
     @NotEmpty(message = "Title mustn't be empty")
+    @JsonDeserialize(using = CapitalizeDeserializer.class)
     private String title;
     @NotEmpty(message = "Author mustn't be empty")
+    @JsonDeserialize(using = CapitalizeDeserializer.class)
     private String author;
     @NotEmpty(message = "Genre mustn't be empty")
+    @JsonDeserialize(using = CapitalizeDeserializer.class)
     private String genre;
     @NotEmpty(message = "ISBN mustn't be empty")
     private String ISBN;

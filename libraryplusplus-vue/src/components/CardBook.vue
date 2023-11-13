@@ -11,7 +11,7 @@
         <span class=""> {{ book.genre }}</span>
       </div>
       <div class="card_footer">
-        <router-link to="/book" >More information</router-link>
+        <router-link :to="{name: 'Product', params: {id: book.id}}" >More information</router-link>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@
     <span><router-link to="/" class="logo">LibraryPlusPlus</router-link></span>
     <ul>
       <li><router-link to="/" class="link" exact><div class="nav-item" >Catalog</div></router-link></li>
-      <li><router-link to="/l" class="link" exact><div class="nav-item">Orders</div></router-link></li>
+      <li><router-link to="/orders" class="link" exact><div class="nav-item">Orders</div></router-link></li>
       <li><router-link to="/c" class="link" exact><div class="nav-item">Cart</div></router-link></li>
       <li><router-link to="/profile" class="link" exact><div class="nav-item" >Profile</div></router-link></li>
     </ul>

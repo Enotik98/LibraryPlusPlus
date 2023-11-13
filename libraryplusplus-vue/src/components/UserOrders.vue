@@ -1,6 +1,6 @@
 <template>
 <div>
-  <table class="table">
+  <table class="table table-hover">
     <thead>
     <tr>
       <th scope="col">#</th>
@@ -14,12 +14,12 @@
     </thead>
     <tbody>
     <tr v-for="order in orders" :key="order.id">
-      <td>{{ order.book.id }}</td>
+      <td>{{ order.id }}</td>
       <td>{{order.book.title}}</td>
       <td>{{order.book.author}}</td>
       <td>{{order.book.genre}}</td>
       <td>{{formatDate(order.orderDate)}}</td>
-      <td>{{order.return_date}}</td>
+      <td>{{formatDate(order.return_date)}}</td>
       <td>{{order.status}}</td>
     </tr>
     </tbody>
@@ -29,7 +29,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
-import moment from "moment";
+import {formatDate} from "../scripts/utils";
 
 export default {
   name: "UserOrders",
@@ -42,9 +42,7 @@ export default {
     this.getUserOrders();
   },
   methods: {
-    formatDate(val){
-      return moment(val).format("DD-MM-YYYY")
-    },
+    formatDate,
     async getUserOrders(){
       try {
         const response = await sendRequest("/order/user", "GET", null);
