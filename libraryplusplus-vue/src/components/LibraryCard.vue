@@ -118,7 +118,6 @@ export default {
 .card_btn > button {
   width: 15em;
   color: var(--blue);
-
 }
 
 </style>

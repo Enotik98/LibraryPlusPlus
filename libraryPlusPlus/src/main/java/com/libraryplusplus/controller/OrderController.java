@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -83,15 +85,20 @@ public class OrderController {
     @PostMapping("/status")
     public ResponseEntity<?> updateOrderStatus(@RequestBody Map<String, String> body) {
         try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
             int id = Integer.parseInt(body.get("id"));
             Status status = Status.valueOf(body.get("status").toUpperCase());
+            Date return_date = format.parse(body.get("return_date"));
 
-            orderService.changeStatus(id, status);
+            orderService.changeStatus(id, status, return_date);
             return ResponseEntity.ok("Update successful");
         } catch (IllegalArgumentException FormatException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

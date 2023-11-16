@@ -1,5 +1,4 @@
 <template>
-  <Header/>
   <div class="body container">
     <div class="search-criteria">
       <SearchCriteria @updateCriteria="updateCriteria"/>
@@ -11,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="admin-panel">
+    <div class="admin-panel" v-if="!isUser">
       <button @click="openModal" class="btn btn-outline-dark">Add Book</button>
     </div>
   </div>
@@ -22,12 +21,12 @@
 
 <script>
 // @ is an alias to /src
-import Header from "@/components/Header.vue";
 import ModalWindow from "@/components/ModalWindow.vue";
 import CreateBook from "@/components/CreateBook.vue";
 import {sendRequest} from "@/scripts/request";
 import CardBook from "@/components/CardBook.vue";
 import SearchCriteria from "@/components/SearchCriteria.vue";
+import {mapState} from "vuex";
 
 export default {
   name: 'HomeView',
@@ -36,7 +35,6 @@ export default {
     CardBook,
     CreateBook,
     ModalWindow,
-    Header
   },
   data() {
     return {
@@ -72,6 +70,9 @@ export default {
       },
       books: []
     }
+  },
+  computed: {
+    ...mapState(['isUser'])
   },
   mounted() {
     this.getBooks();

@@ -18,7 +18,8 @@ export async function sendRequest(url, method, data){
     const response = await fetch(BASE_URL + url, request);
     if (response.status === 401){
         localStorage.clear();
-        this.$router.push("/login")
+        this.$store.logout();
+        return this.$router.push("/login")
     }
     return response;
 }

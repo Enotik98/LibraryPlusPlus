@@ -1,7 +1,19 @@
 <template>
-  <router-link to="/registration" />
+  <Header v-if="showHeader" />
   <router-view/>
 </template>
+<script>
+export default {
+  computed: {
+    showHeader() {
+      return this.$route.path !== '/login';
+    }
+  },
+  mounted() {
+    this.$store.dispatch('fetchUser');
+  }
+}
+</script>
 
 <style>
 :root {
@@ -26,3 +38,6 @@ html, body {
   /*color: #2c3e50;*/
 }
 </style>
+<script setup>
+import Header from "@/components/Header.vue";
+</script>

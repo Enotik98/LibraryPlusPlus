@@ -22,6 +22,7 @@ public class OrderDTO {
     private int user_id;
     @NotNull(message = "Book_id is empty")
     private int book_id;
+    @Temporal(TemporalType.DATE)
     private Date orderDate;
     @NotNull
     @Future

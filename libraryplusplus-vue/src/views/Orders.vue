@@ -1,5 +1,4 @@
 <template>
-  <Header />
 <div class="container">
   <table class="table table-hover">
     <thead>
@@ -34,12 +33,10 @@
 <script>
 import {sendRequest} from "@/scripts/request";
 import {formatDate} from "../scripts/utils";
-import Header from "@/components/Header.vue";
-
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Orders",
-  components: {Header},
+  components: {},
   data() {
     return {
       orders: []

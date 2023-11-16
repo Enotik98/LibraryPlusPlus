@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class Order {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "order_date")
     private Date orderDate ;
     @Temporal(TemporalType.DATE)
@@ -47,6 +48,7 @@ public class Order {
     @PrePersist
     public void setDefaultValues(){
         if (orderDate == null){
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             orderDate = new Date();
         }
         if (return_date == null){

@@ -61,6 +61,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
+import {mapMutations} from "vuex";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -112,8 +113,10 @@ export default {
             if (response.ok) {
               const data = await response.json();
               localStorage.setItem("Token", data['Token']);
+              this.login();
+              this.$store.dispatch('fetchUser');
+
               this.$router.push('/');
-              console.log('ok')
             }
           } catch (error) {
             console.error(error);
@@ -136,7 +139,11 @@ export default {
               const data = await response.json();
               localStorage.setItem("Token", data['Token']);
 
-              console.log('ok')
+              this.login()
+              this.$store.dispatch('fetchUser');
+
+              this.$router.push('/');
+
             }
           } catch (error) {
             console.error(error);
@@ -147,7 +154,8 @@ export default {
       } else {
         this.toggleForm();
       }
-    }
+    },
+    ...mapMutations(['login'])
   }
 
 }

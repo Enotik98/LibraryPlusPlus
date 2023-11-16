@@ -5,6 +5,8 @@ import Profile from "@/views/Profile.vue";
 import Orders from "@/views/Orders.vue";
 import OrderInfo from "@/views/OrderInfo.vue";
 import Product from "@/views/Product.vue";
+import Analytics from "@/views/Analytics.vue";
+import Users from "@/views/Users.vue";
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
     path: '/book/:id',
     name: 'Product',
     component: Product
+  },
+  {
+    path: '/analytics',
+    name: 'Analytics',
+    component: Analytics
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users
   },
   // {
   //   path: '/about',

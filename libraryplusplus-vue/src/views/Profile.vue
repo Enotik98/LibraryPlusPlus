@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <Header/>
     <div class="body container">
       <div class="profile-menu">
         <div class="menu-item">
@@ -41,7 +40,6 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import UserData from "@/components/UserData.vue";
 import UserOrders from "@/components/UserOrders.vue";
 import LibraryCard from "@/components/LibraryCard.vue";
@@ -50,7 +48,7 @@ import {sendRequest} from "@/scripts/request";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Profile",
-  components: {LibraryCard, UserOrders, UserData, Header},
+  components: {LibraryCard, UserOrders, UserData},
   data() {
     return {
       user: {},

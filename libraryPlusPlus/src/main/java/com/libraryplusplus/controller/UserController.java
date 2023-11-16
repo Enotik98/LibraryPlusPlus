@@ -92,11 +92,13 @@ public class UserController {
     }
 
     @PostMapping("/restriction")
-    public ResponseEntity<?> updateRestriction(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> updateRestrictionAndRole(@RequestBody Map<String, String> body) {
         try {
             int id = Integer.parseInt(body.get("id"));
             boolean sanctions = Boolean.parseBoolean(body.get("sanctions"));
             boolean blocked = Boolean.parseBoolean(body.get("blocked"));
+            Role role = Role.valueOf((body.get("role")).toUpperCase());
+
             userService.updateRestrictions(id, sanctions, blocked);
             return ResponseEntity.ok("update successful");
         } catch (IllegalArgumentException FormatException) {

@@ -57,9 +57,13 @@ public class OrderService {
     }
 
 
-    public Order findOrderById(int id) {
+    public FullOrderDTO findOrderById(int id) {
         try {
-            return orderRepository.findById(id);
+            Order order = orderRepository.findById(id);
+            if (order == null){
+                throw new CustomException(HttpStatus.NOT_FOUND, "Order already exists");
+            }
+            return FullOrderDTO.ConvertToDTO(order);
         } catch (Exception e) {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -88,11 +92,16 @@ public class OrderService {
         }
     }
 
-    public void changeStatus(int id, Status status) {
+    public void changeStatus(int id, Status status, Date date) {
         try {
             Order order = orderRepository.findById(id);
             if (order.getStatus().equals(status)) {
                 throw new CustomException(HttpStatus.OK, "The status hasn't been changed");
+            }
+            if (status.equals(Status.CHECKOUT)){
+                if (date != null && !order.getReturn_date().equals(date)){
+                    order.setReturn_date(date);
+                }
             }
             if (status.equals(Status.RETURNED)) {
                 Date currentDate = new Date();
