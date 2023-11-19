@@ -25,19 +25,25 @@ public class ExtensionRequestService {
     @Autowired
     OrderRepository orderRepository;
 
-    public List<ExtensionRequestDTO> findAllRequest() {
+    public List<ExtensionRequest> findAllRequest() {
         try {
-            List<ExtensionRequest> requests = extensionRequestRepository.findAll();
-            List<ExtensionRequestDTO> result = new ArrayList<>();
-            for (ExtensionRequest request : requests) {
-                result.add(ExtensionRequestDTO.ConvertToDTO(request));
-            }
-            return result;
+            return extensionRequestRepository.findAll();
         } catch (Exception e) {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
+    public List<ExtensionRequest> findAllUserRequest(int userId) {
+        try {
+            User user = userRepository.findById(userId);
+            if (user == null) {
+                throw new CustomException(HttpStatus.NOT_FOUND, "Don't found user");
+            }
+            return extensionRequestRepository.findAllByUser(user);
+        }catch (Exception e){
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
     public void addExtensionRequest(ExtensionRequestDTO extensionRequestDTO) {
         try {
             User user = userRepository.findById(extensionRequestDTO.getUser_id());
@@ -64,8 +70,8 @@ public class ExtensionRequestService {
             if (exRequest == null) {
                 throw new CustomException(HttpStatus.NOT_FOUND, "Request not found!");
             } else {
-                if (extensionRequestDTO.getUser_id() == exRequest.getUser().getId() || extensionRequestDTO.getOrder_id() == exRequest.getOrder().getId()) {
-                    throw new CustomException(HttpStatus.NOT_FOUND, "User id or order id doesn't match");
+                if (extensionRequestDTO.getOrder_id() != exRequest.getOrder().getId()) {
+                    throw new CustomException(HttpStatus.NOT_FOUND, "Order id doesn't match");
                 }
                 if (exRequest.getStatus().equals(extensionRequestDTO.getStatus())) {
                     throw new CustomException(HttpStatus.OK, "The status hasn't changed");

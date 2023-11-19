@@ -19,9 +19,9 @@
           </select>
         </div>
         <button class="btn btn-outline-dark" @click="createOrder" :disabled="!isAvailable">Add to Cart</button>
+        <div>{{ errorMess }}</div>
       </div>
     </div>
-    <div>{{errorMess}}</div>
     <div class="edit-book" v-if="!isUser">
       <button class="btn btn-outline-dark">Edit</button>
     </div>
@@ -73,22 +73,18 @@ export default {
     },
     async createOrder() {
       if (!this.isLoggedIn) this.$router.push('/login')
-      try {
-        this.order.book_id = this.$route.params.id
-        this.order.return_date = calculateDate(this.selectDays);
-        if (this.order.book_id === "" || this.order.return_date === "") {
-          return;
+      this.order.book_id = this.$route.params.id
+      this.order.return_date = calculateDate(new Date, this.selectDays);
+      if (this.order.book_id === "" || this.order.return_date === "") {
+        return;
+      }
+      console.log(this.order)
+      const response = await sendRequest("/order", "POST", this.order);
+      if (!response.ok) {
+        if (response.status === 403) {
+          this.errorMess = await response.text();
         }
-        console.log(this.order)
-        const response = await sendRequest("/order", "POST", this.order);
-        if (!response.ok) {
-          if (response.status === 403){
-            this.errorMess = response.text;
-          }
-          console.log("error")
-        }
-      } catch (e) {
-        console.error(e)
+        console.log("error")
       }
     }
   }
@@ -130,10 +126,12 @@ export default {
 .card-title {
   font-size: 1.7em;
 }
+
 .edit-book {
   margin-top: 3em;
   padding-left: 1em;
 }
+
 .edit-book > button {
   width: 5em;
 }

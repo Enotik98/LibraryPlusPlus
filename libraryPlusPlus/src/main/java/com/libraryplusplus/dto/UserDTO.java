@@ -53,7 +53,7 @@ public class UserDTO {
         newUser.setRole(user.getRole());
         newUser.setIsSanctions(user.getIsSanctions());
         newUser.setIsBlocked(user.getIsBlocked());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(PasswordUtils.hashPassword(user.getPassword()));
         return newUser;
     }
     //

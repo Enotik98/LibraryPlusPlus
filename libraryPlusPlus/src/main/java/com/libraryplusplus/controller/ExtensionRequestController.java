@@ -34,6 +34,18 @@ public class ExtensionRequestController {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
     }
+    @GetMapping("/user")
+    public ResponseEntity<?> getAllUserRequests() {
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            int userId = Integer.parseInt(authentication.getName());
+            return ResponseEntity.ok(extensionRequestService.findAllUserRequest(userId));
+        }catch (IllegalArgumentException FormatException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
 
     @PostMapping("")
     public ResponseEntity<?> addRequest(@Valid @RequestBody ExtensionRequestDTO extensionRequestDTO, BindingResult bindingResult) {
@@ -61,9 +73,6 @@ public class ExtensionRequestController {
             }
             if (extensionRequestDTO.getStatus() == null) {
                 return ResponseEntity.badRequest().body("The status is incorrect");
-            }
-            if ((extensionRequestDTO.getUser_id()) == 0){
-                return ResponseEntity.badRequest().body("The user id is incorrect");
             }
             extensionRequestService.updateExtensionRequest(extensionRequestDTO);
             return ResponseEntity.ok("update successful");

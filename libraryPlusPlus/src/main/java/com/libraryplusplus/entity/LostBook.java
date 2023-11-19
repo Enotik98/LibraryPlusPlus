@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Table(name = "lost_books", schema = "public")
@@ -24,7 +25,7 @@ public class LostBook {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_lost")
     private Date dateLost;
 

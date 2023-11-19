@@ -134,8 +134,9 @@ export default {
         if (this.formData.email !== '' && this.formData.password !== '') {
           try {
             const response = await sendRequest('/registration', 'POST', this.formData)
-            console.log(await response.text())
+            // console.log(await response.text())
             if (response.ok) {
+              console.log(await response)
               const data = await response.json();
               localStorage.setItem("Token", data['Token']);
 

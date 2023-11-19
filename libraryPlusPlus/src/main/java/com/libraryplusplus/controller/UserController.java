@@ -95,9 +95,8 @@ public class UserController {
     public ResponseEntity<?> updateRestrictionAndRole(@RequestBody Map<String, String> body) {
         try {
             int id = Integer.parseInt(body.get("id"));
-            boolean sanctions = Boolean.parseBoolean(body.get("sanctions"));
-            boolean blocked = Boolean.parseBoolean(body.get("blocked"));
-            Role role = Role.valueOf((body.get("role")).toUpperCase());
+            boolean sanctions = Boolean.parseBoolean(body.get("isSanctions"));
+            boolean blocked = Boolean.parseBoolean(body.get("isBlocked"));
 
             userService.updateRestrictions(id, sanctions, blocked);
             return ResponseEntity.ok("update successful");

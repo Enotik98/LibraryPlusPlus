@@ -6,14 +6,20 @@ import com.libraryplusplus.entity.Order;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 public class LostBookDTO {
     private int id;
+    @NotNull
     private int book_id;
     private int order_id;
+    @Temporal(TemporalType.DATE)
     private Date dateLost;
     public static LostBookDTO ConvertToDTO(LostBook book){
         LostBookDTO dto = new LostBookDTO();

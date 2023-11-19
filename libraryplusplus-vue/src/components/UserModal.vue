@@ -1,27 +1,55 @@
 <template>
-<div class="user">
-  <div>
-    <p>Email: {{userInfo.email}}</p>
-    <p>First Name: {{userInfo.first_name}}</p>
-    <p>Last Name: {{userInfo.last_name}}</p>
-    <p>Phone: {{userInfo.phone}}</p>
-    <p>Address: {{userInfo.address}}</p>
-    <p>Role: {{userInfo.role}}</p>
-    <p>Restrictions</p>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" v-model="isSanctions">
-      <label>Sanctions</label>
+  <div class="user">
+    <div>
+      <p>Email: {{ user.email }}</p>
+      <p>First Name: {{ user.first_name }}</p>
+      <p>Last Name: {{ user.last_name }}</p>
+      <p>Phone: {{ user.phone }}</p>
+      <p>Address: {{ user.address }}</p>
+      <p>Role: {{ user.role }}</p>
     </div>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" v-model="isBlocked">
-      <label>Blocked</label>
+    <div class="user-control">
+      <div>
+        <p>Restrictions</p>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" v-model="this.restriction.isSanctions" :disabled="userRole === 'LIBRARIAN'">
+          <label>Sanctions</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" v-model="this.restriction.isBlocked" :disabled="userRole === 'LIBRARIAN' && this.user.isBlocked">
+          <label>Blocked</label>
+        </div>
+        <div>
+          <button @click="updateRestriction" class="btn btn-outline-dark">Save</button>
+        </div>
+      </div>
+      <div v-if="userRole === 'ADMIN'">
+        <label>Make Role</label>
+        <div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" value="USER" v-model="role">
+            <label class="form-check-label">User</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" value="LIBRARIAN" v-model="role">
+            <label class="form-check-label">Librarian</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" value="ADMIN" v-model="role">
+            <label class="form-check-label">Admin</label>
+          </div>
+        </div>
+        <button @click="updateRole" class="btn btn-outline-dark">Change Role</button>
+      </div>
     </div>
-  </div>
 
-</div>
+  </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+import {sendRequest} from "@/scripts/request";
+
 export default {
   name: "UserModal",
   props: {
@@ -29,20 +57,60 @@ export default {
   },
   data() {
     return {
-      isSanctions: false,
-      isBlocked: false,
+      restriction: {
+        id: this.userInfo.id,
+        isSanctions: this.userInfo.isSanctions,
+        isBlocked: this.userInfo.isBlocked,
+      },
+      role: this.userInfo.role,
+      user: {},
     }
   },
+  computed: {
+    ...mapState(['userRole'])
+  },
   mounted() {
-    this.isSanctions = this.userInfo.isSanctions;
-    this.isBlocked = this.userInfo.isBlocked;
+    this.user = this.userInfo
+  },
+  methods: {
+    async updateRestriction(){
+      const response = await sendRequest("/user/restriction", "POST", this.restriction);
+      if (!response.ok){
+        console.error(await response.text())
+      }
+      await this.getUser();
 
+    },
+    async updateRole(){
+      if (this.role === this.userInfo.role){
+        return;
+      }
+      const response = await sendRequest("/user/role", "POST", {id: this.userInfo.id, role: this.role})
+      if (!response.ok){
+        console.error(await response.text())
+        return;
+      }
+      await this.getUser();
+    },
+    async getUser(){
+      const response = await sendRequest("/user/" + this.userInfo.id, "GET", null)
+      if (!response.ok){
+        console.error(await response.text())
+        return;
+      }
+      this.user = await response.json();
+    }
   }
+
 }
 </script>
 
 <style scoped>
 .user {
-  width: 30em;
+  width: 40em;
+  padding: 0 1.5em;
+
+  display: flex;
+  justify-content: space-between;
 }
 </style>

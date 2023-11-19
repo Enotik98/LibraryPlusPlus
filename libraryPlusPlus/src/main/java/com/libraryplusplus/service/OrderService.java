@@ -106,6 +106,10 @@ public class OrderService {
             if (status.equals(Status.RETURNED)) {
                 Date currentDate = new Date();
                 order.setReturnedLate(currentDate.after(order.getReturn_date()));
+
+//                may be make when book was returned
+//                order.setReturn_date(currentDate);
+
             }
             if (status.equals(Status.LOST)) {
                 lostBookService.addLostBook(order.getId());
@@ -149,7 +153,7 @@ public class OrderService {
         try {
             Order order = orderRepository.findById(id);
             User user = userRepository.findById(user_id);
-            if (order.getUser().getId() != user_id || !user.getRole().equals(Role.LIBRARIAN)){
+            if (order.getUser().getId() != user_id && !user.getRole().equals(Role.LIBRARIAN)){
                 throw new CustomException(HttpStatus.FORBIDDEN, "You can't cancel an order");
             }
             if (!order.getStatus().equals(Status.AWAITING)) {

@@ -4,7 +4,8 @@ import {sendRequest} from "@/scripts/request";
 const store = createStore({
     state: {
         isLoggedIn: !!localStorage.getItem("Token"),
-        isUser: true
+        isUser: true,
+        userRole: "USER",
     },
     mutations: {
         login(state) {
@@ -13,6 +14,7 @@ const store = createStore({
         },
         setUser(state, value) {
             state.isUser = value === "USER"
+            state.userRole = value;
             console.log("User " + state.isUser)
         },
         logout(state) {
@@ -23,11 +25,12 @@ const store = createStore({
     },
     actions: {
         async fetchUser({commit}) {
-            // if (isLoggedIn) console.log(true)
-            const response = await sendRequest("/user/profile", "GET", null);
-            if (response.ok) {
-                const data = await response.json();
-                commit('setUser', data['role'])
+            if (this.state.isLoggedIn) {
+                const response = await sendRequest("/user/profile", "GET", null);
+                if (response.ok) {
+                    const data = await response.json();
+                    commit('setUser', data['role'])
+                }
             }
         }
     }
