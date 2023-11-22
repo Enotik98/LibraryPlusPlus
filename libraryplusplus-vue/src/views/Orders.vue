@@ -1,85 +1,92 @@
 <template>
-  <div class="container d-flex">
+  <div class="container d-flex mt-4">
     <div class="w-100">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Email</th>
-          <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="request in filterRequests" :key="request.id" @click="openRequestDetail(request)">
-          <td>{{ request.id }}</td>
-          <td>{{ request.order.book.title }}</td>
-          <td>{{ request.user.email }}</td>
-          <td>{{ request.status }}</td>
-        </tr>
-        </tbody>
-      </table>
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>Email</th>
-          <th>Title</th>
-          <th>Order Date</th>
-          <th>Returned Date</th>
-          <th>Status</th>
-          <th>Returned Late</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td><input type="text" v-model="filterOrder.id" placeholder="#" class="form-control"></td>
-          <td><input type="text" v-model="filterOrder.email" placeholder="email" class="form-control"></td>
-          <td><input type="text" v-model="filterOrder.title" placeholder="title" class="form-control"></td>
-          <td colspan="2">
-            <select v-model="filterOrder.status" class="form-select">
-              <option value="">Choose Status</option>
-              <option value="AWAITING">AWAITING</option>
-              <option value="CHECKOUT">CHECKOUT</option>
-              <option value="RETURNED">RETURNED</option>
-              <option value="LOST">LOST</option>
-            </select></td>
-          <td colspan="2">
-            <button class="btn btn-outline-dark " @click="filterOrder = clearFilter(filterOrder)">Clear Filter</button>
-          </td>
-        </tr>
-        <tr v-for="order in filterOrders" :key="order.id" @click="goToOrderPage(order.id)"
-            :class="{'table-warning' : checkLate(order)}">
-          <td>{{ order.id }}</td>
-          <td>{{ order.user.email }}</td>
-          <td>{{ order.book.title }}</td>
-          <td>{{ formatDate(order.orderDate) }}</td>
-          <td>{{ formatDate(order.return_date) }}</td>
-          <td>{{ order.status }}</td>
-          <td>
-            <div v-if="order.status === 'RETURNED' ">
-              <i v-if="order.returnedLate" class="fa-regular fa-calendar-xmark"
-                 style="color: #ff4013; font-size: 1.4rem"></i>
-              <i v-else class="fa-regular fa-calendar-check" style="color: #96d35f; font-size: 1.4rem"></i>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div v-if="showRequests">
+        <span class="title">Extension Requests</span>
+        <table class="table table-hover" >
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Email</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="request in filterRequests" :key="request.id" @click="openRequestDetail(request)">
+            <td>{{ request.id }}</td>
+            <td>{{ request.order.book.title }}</td>
+            <td>{{ request.user.email }}</td>
+            <td>{{ request.status }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <span class="title">Orders</span>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Title</th>
+            <th>Order Date</th>
+            <th>Returned Date</th>
+            <th>Status</th>
+            <th>Returned Late</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="td-id"><input type="text" v-model="filterOrder.id" placeholder="#" class="form-control"></td>
+            <td><input type="text" v-model="filterOrder.email" placeholder="email" class="form-control"></td>
+            <td><input type="text" v-model="filterOrder.title" placeholder="title" class="form-control"></td>
+            <td colspan="2">
+              <select v-model="filterOrder.status" class="form-select">
+                <option value="">Choose Status</option>
+                <option value="AWAITING">AWAITING</option>
+                <option value="CHECKOUT">CHECKOUT</option>
+                <option value="RETURNED">RETURNED</option>
+                <option value="LOST">LOST</option>
+              </select></td>
+            <td colspan="2">
+              <button class="btn btn-outline-dark " @click="filterOrder = clearFilter(filterOrder)">Clear Filter
+              </button>
+            </td>
+          </tr>
+          <tr v-for="order in filterOrders" :key="order.id" @click="goToOrderPage(order.id)"
+              :class="{'table-warning' : checkLate(order)}">
+            <td>{{ order.id }}</td>
+            <td>{{ order.user.email }}</td>
+            <td>{{ order.book.title }}</td>
+            <td>{{ formatDate(order.orderDate) }}</td>
+            <td>{{ formatDate(order.return_date) }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+              <div v-if="order.status === 'RETURNED' ">
+                <i v-if="order.returnedLate" class="fa-regular fa-calendar-xmark"
+                   style="color: #ff4013; font-size: 1.4rem"></i>
+                <i v-else class="fa-regular fa-calendar-check" style="color: #96d35f; font-size: 1.4rem"></i>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="panel">
       <div class="form-check form-check-inline ">
         <input type="checkbox" class="form-check-input" v-model="showRequests">
         <label class="form-check-label">Show requests</label>
       </div>
-      <div class="form-check form-check-inline ">
+      <div class="form-check form-check-inline " v-if="showRequests">
         <input type="checkbox" class="form-check-input" v-model="showPending">
-        <label class="form-check-label" >Show Pending Requests</label>
+        <label class="form-check-label">Show Pending Requests</label>
       </div>
     </div>
   </div>
   <ModalWindow ref="ModalWindow">
-    <ExtensionRequestModal :extension-request="chooseRequest"/>
+    <ExtensionRequestModal :extension-request="chooseRequest" :close-modal-window="()=>{this.$refs.ModalWindow.closeModal()}" :update-list-request="getExtensionRequests"/>
   </ModalWindow>
 </template>
 
@@ -127,9 +134,9 @@ export default {
       }
       return result.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
     },
-    filterRequests(){
+    filterRequests() {
       let result = this.extensionRequests;
-      if (this.showPending){
+      if (this.showPending) {
         result = result.filter(request => {
           return (
               request.status.includes("PENDING")
@@ -148,7 +155,6 @@ export default {
       return obj;
     },
     checkLate(order) {
-      console.log(new Date(order.return_date) < new Date())
       return (order.status === 'CHECKOUT' && new Date(order.return_date) < new Date())
     },
     formatDate,
@@ -184,14 +190,20 @@ export default {
 </script>
 
 <style scoped>
-.table,
-.panel {
-  margin: 2em 0;
-}
-
 .panel {
   width: 10em;
 }
+.title {
+  color: var(--blue-opacity);
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.td-id {
+  width: 6em;
+}
+
 
 /*:style="{backgroundColor: checkLate(order) ? '#FFA500' : 'inherit'}*/
 </style>

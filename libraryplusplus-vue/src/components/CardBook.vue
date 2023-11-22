@@ -1,6 +1,6 @@
 <template>
   <div class="card ">
-    <img src="../assets/samuray.jpg" class="card-img-top img" alt="book_img">
+    <img :src="book.path_img" class="card-img-top img" :alt="'Book' + book.id">
     <div class="card-body">
       <div class="card_header">
         <span class="card_title">{{ book.title }}</span>

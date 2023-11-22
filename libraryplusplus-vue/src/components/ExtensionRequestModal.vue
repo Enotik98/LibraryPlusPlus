@@ -1,22 +1,23 @@
 <template>
-<div class="request">
-<div>
-  <p>Title: {{extensionRequest.order.book.title}}</p>
-  <p>Email: {{extensionRequest.user.email}}</p>
-  <p>New return date: {{extensionRequest.new_return_date}}</p>
-  <p>Return date: {{extensionRequest.order.return_date}}</p>
-  <p>Status: {{extensionRequest.status}}</p>
-  <div>
-    <span>Message: {{extensionRequest.message}}</span>
-    <input class="form-control" v-model="mess" placeholder="Response">
-  </div>
-  <div class="request-control">
-    <button @click="updateRequest('Confirm')" class="btn btn-outline-dark">Confirm</button>
-    <button @click="updateRequest('Cancel')" class="btn btn-outline-dark">Cancel</button>
-  </div>
+  <div class="request">
+    <label class="title">Request {{ extensionRequest.id }}</label>
+    <div>
+      <p>Title: {{ extensionRequest.order.book.title }}</p>
+      <p>Email: {{ extensionRequest.user.email }}</p>
+      <p>New return date: {{ extensionRequest.new_return_date }}</p>
+      <p>Return date: {{ extensionRequest.order.return_date }}</p>
+      <p>Status: {{ extensionRequest.status }}</p>
+      <div>
+        <span>Message: {{ extensionRequest.message }}</span>
+        <input class="form-control mt-2" v-model="mess" placeholder="Response">
+      </div>
+      <div class="request-control">
+        <button @click="updateRequest('Confirm')" class="btn btn-success">Confirm</button>
+        <button @click="updateRequest('Cancel')" class="btn btn-outline-danger">Cancel</button>
+      </div>
 
-</div>
-</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -25,7 +26,10 @@ import {sendRequest} from "@/scripts/request";
 export default {
   name: "ExtensionRequestModal",
   props: {
-    extensionRequest: Object
+    extensionRequest: Object,
+    closeModalWindow: Function,
+    updateListRequest: Function,
+
   },
   data() {
     return {
@@ -42,11 +46,18 @@ export default {
   mounted() {
   },
   methods: {
-    async updateRequest(status){
+    async updateRequest(status) {
       switch (status) {
-        case "Confirm": {this.editRequest.status = "APPROVED"; break;}
-        case "Cancel": {this.editRequest.status = "REJECTED"; break;}
-        default: return;
+        case "Confirm": {
+          this.editRequest.status = "APPROVED";
+          break;
+        }
+        case "Cancel": {
+          this.editRequest.status = "REJECTED";
+          break;
+        }
+        default:
+          return;
       }
       this.editRequest.id = this.extensionRequest.id;
       this.editRequest.new_return_date = this.extensionRequest.new_return_date;
@@ -55,9 +66,15 @@ export default {
 
       const response = await sendRequest("/extension_request", "PUT", this.editRequest);
 
-      if(!response.ok){
-        console.error(await response.text())
+      if (!response.ok) {
+        const errorMessage = await response.text()
+        this.$Notiflix.Notify.success(errorMessage)
+        return;
       }
+      this.updateListRequest();
+      this.$Notiflix.Notify.success("The request has been updated!");
+      this.closeModalWindow();
+
     }
   }
 }
@@ -67,8 +84,19 @@ export default {
 .request {
   width: 30em;
 }
+
+.request > div {
+  font-size: 1.1rem;
+}
+
+.request p {
+  padding: .3rem 0;
+  margin: 0;
+}
+
 .request-control {
   display: flex;
   justify-content: space-around;
+  margin-top: 1em;
 }
 </style>

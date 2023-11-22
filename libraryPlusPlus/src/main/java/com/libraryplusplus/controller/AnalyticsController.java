@@ -48,26 +48,6 @@ public class AnalyticsController {
         }
     }
 
-    @PostMapping("/genre-csv")
-    public ResponseEntity<byte[]> getGenreReportCSV(@RequestBody Map<String, String> body) {
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date start = format.parse(body.get("start"));
-            Date end = format.parse(body.get("end"));
-
-            List<Map<String, Integer>> genreReport = analyticsService.getGenreReport(start, end);
-            byte[] cvsDate = analyticsService.generateGenreReportCSV(genreReport);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "genre_report.csv");
-
-            return new ResponseEntity<>(cvsDate, headers, HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage().getBytes());
-        }
-    }
-
     @PostMapping("/genre-excel")
     public ResponseEntity<byte[]> getGenreReportExcel(@RequestBody Map<String, String> body) {
         try {
@@ -104,6 +84,30 @@ public class AnalyticsController {
             return ResponseEntity.badRequest().body(e.getMessage().getBytes());
         }
 
+    }
+    @GetMapping("/restrictions_excel")
+    public ResponseEntity<byte[]> getRestrictionsUserReportExcel(){
+        try {
+            ByteArrayOutputStream outputStream = analyticsService.restrictionsUsersReportExcel();
+            HttpHeaders headers = createHeaderExcel("restrictions_user_report.xlsx");
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage().getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage().getBytes());
+        }
+    }
+    @GetMapping("/lost_book_excel")
+    public ResponseEntity<byte[]> getLostBookReportExcel(){
+        try {
+            ByteArrayOutputStream outputStream = analyticsService.lostBookReportExcel();
+            HttpHeaders headers = createHeaderExcel("lost_book_report.xlsx");
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage().getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage().getBytes());
+        }
     }
 
     public HttpHeaders createHeaderExcel(String file){

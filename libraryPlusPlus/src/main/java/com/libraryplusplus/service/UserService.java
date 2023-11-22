@@ -53,7 +53,7 @@ public class UserService {
             User exUser = userRepository.findByEmail(authDTO.getEmail());
             if (exUser != null) {
                 //409
-                throw new CustomException(HttpStatus.CONFLICT, "An account with such email already exists");
+                throw new CustomException(HttpStatus.CONFLICT, "An account with such email already exists. Choose another email.");
             }
             User user = authDTO.ConvertToUser();
             userRepository.save(user);
@@ -68,7 +68,7 @@ public class UserService {
         try {
             User user = userRepository.findById(id);
             if (user == null) {
-                throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
+                throw new CustomException(HttpStatus.NOT_FOUND, "Account not found.");
             }
             user.setRole(role);
             userRepository.save(user);
@@ -79,12 +79,16 @@ public class UserService {
         }
     }
 
-    public void updateRestrictions(int id, boolean sanction, boolean blocked) {
+    public void updateRestrictions(int userId, boolean sanction, boolean blocked, String tokenUserRole) {
         try {
-            User user = userRepository.findById(id);
+            User user = userRepository.findById(userId);
             if (user == null) {
                 throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
             }
+            if (tokenUserRole.equals("ROLE_LIBRARIAN") && user.getRole().equals(Role.ADMIN)){
+                throw new CustomException(HttpStatus.FORBIDDEN, "No access to edit this account.");
+            }
+
             user.setIsBlocked(blocked);
             user.setIsSanctions(sanction);
             userRepository.save(user);

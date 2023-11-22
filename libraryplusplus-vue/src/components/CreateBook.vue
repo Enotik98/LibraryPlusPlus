@@ -1,6 +1,6 @@
 <template>
   <div class="book">
-    <form class="form-book" @submit="creatBook">
+    <form class="form-book" @submit.prevent="submitFormBook">
       <label class="title-card">Create Book</label>
       <div class="form-group">
         <label class="form-label">Title</label>
@@ -35,7 +35,8 @@
         <input class="form-control" type="text" v-model="book.path_img">
       </div>
       <div class="button">
-        <button type="submit" class="btn btn-outline-dark">Save</button>
+        <button v-if="!editBook" type="submit" class="btn btn-outline-dark">Create</button>
+        <button v-else type="submit" class="btn btn-outline-dark">Save</button>
       </div>
     </form>
   </div>
@@ -46,6 +47,10 @@ import {sendRequest} from "@/scripts/request";
 
 export default {
   name: "CreateBook",
+  props: {
+    editBook: Object,
+    modalClose: Function,
+  },
   data() {
     return {
       book: {
@@ -60,17 +65,41 @@ export default {
       }
     }
   },
-  methods: {
-    async creatBook(){
-      try{
-        const response = await sendRequest("/book", "POST", this.book)
-        if (response.ok){
-          console.log(response.text);
-        }
-      }catch (e){
-        console.error(e)
-      }
+  mounted() {
+    if (this.editBook != null) {
+      this.book = this.editBook
     }
+  },
+  methods: {
+    extractFileIdFromUrl(urlGoogle) {
+      const match = urlGoogle.match(/\/d\/([^/]+)|[?&]id=([^&]+)/);
+      if (match) {
+        return match[1] || match[2];
+      }
+      return "";
+    },
+    async submitFormBook() {
+      let errorMessage = null;
+      if (this.book.path_img !== "") {
+        const file = this.extractFileIdFromUrl(this.book.path_img)
+        this.book.path_img = "https://drive.google.com/uc?export=view&id=" + file
+        console.log(this.book.path_img)
+      }
+      if (!this.editBook) {
+        const response = await sendRequest("/book", "POST", this.book)
+        if (!response.ok) {
+          errorMessage = await response.text()
+        }
+      } else {
+        const response = await sendRequest("/book", "PUT", this.book)
+        if (!response.ok) {
+          errorMessage = await response.text()
+        }
+      }
+      errorMessage ? this.$Notiflix.Notify.failure(errorMessage) : this.$Notiflix.Notify.success("Successful!")
+      !errorMessage ? this.modalClose() : null;
+
+    },
   }
 }
 </script>
@@ -85,13 +114,16 @@ export default {
   width: 100%;
   text-align: center;
 }
+
 .form-group {
   margin: 1em 0;
 }
+
 .button {
   display: flex;
   justify-content: center;
 }
+
 .button button {
   width: 10em;
 }

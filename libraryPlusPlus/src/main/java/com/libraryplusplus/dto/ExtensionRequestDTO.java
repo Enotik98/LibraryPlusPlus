@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -18,12 +19,13 @@ import java.util.Date;
 public class ExtensionRequestDTO {
     private int id;
     @NotNull(message = "Order id is empty")
+    @Min(value = 1, message = "Order id mustn't be empty.")
     private int order_id;
     private int user_id;
     private Date request_date;
     private RequestStatus status;
     @NotNull
-    @Future
+    @Future(message = "Field new return date was filled incorrect.")
     @Temporal(TemporalType.DATE)
     private Date new_return_date;
     private String message;

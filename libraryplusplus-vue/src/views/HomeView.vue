@@ -1,11 +1,19 @@
 <template>
   <div class="body container">
     <div class="search-criteria">
-      <SearchCriteria @updateCriteria="updateCriteria"/>
+      <SearchCriteria @apply-filters="applyFilterBook"/>
     </div>
     <div class="list-books">
+      <div class="card-grid" v-if="showLostBook">
+        <!--        <div v-if="showLostBook">-->
+
+        <div v-for="lost in lostBooks" :key="lost.id" class="card-item">
+          <CardBook :book="lost.book" style="opacity: .5;"/>
+        </div>
+        <!--        </div>-->
+      </div>
       <div class="card-grid">
-        <div v-for="book in books" :key="book.id" class="card-item">
+        <div v-for="book in filterBooks" :key="book.id" class="card-item">
           <CardBook :book="book"/>
         </div>
       </div>
@@ -15,7 +23,7 @@
     </div>
   </div>
   <ModalWindow ref="ModalWindow">
-    <CreateBook/>
+    <CreateBook :modal-close="() => {this.$refs.ModalWindow.closeModal()}"/>
   </ModalWindow>
 </template>
 
@@ -38,37 +46,10 @@ export default {
   },
   data() {
     return {
-      searchParams: {
-        title: "",
-        minYear: 1990,
-        maxYear: new Date().getFullYear(),
-        author: "",
-        genre: "",
-        lostBook: false,
-      },
-      book: {
-        id: '',
-        title: '',
-        author: '',
-        genre: '',
-        isbn: '',
-        publication_year: '',
-        quantity: '',
-        about: '',
-        add_date: ''
-      },
-      test_book: {
-        id: '1',
-        title: 'Harry Potter ',
-        author: 'Alex Bilok',
-        genre: 'Fantasy',
-        isbn: '99999',
-        publication_year: '2022',
-        quantity: '2',
-        about: 'text',
-        add_date: '2023-10-22'
-      },
-      books: []
+      books: [],
+      lostBooks: [],
+      filterBooks: [],
+      showLostBook: false
     }
   },
   computed: {
@@ -76,20 +57,47 @@ export default {
   },
   mounted() {
     this.getBooks();
+    if (!this.isUser) {
+      this.getLostBook();
+    }
   },
   methods: {
     openModal() {
       this.$refs.ModalWindow.openModal();
     },
-    updateCriteria(newCriteria) {
-      this.searchParams = {...newCriteria};
+    applyFilterBook(params) {
+      let result = this.books;
+      this.showLostBook = params.lostBook
+      if (params.title || params.minYear || params.maxYear || params.author || params.genre) {
+        result = result.filter(book => {
+          return (
+              (!params.title || book.title.toLowerCase().includes(params.title.toLowerCase())) &&
+              (!params.author || book.author.toLowerCase().includes(params.author.toLowerCase())) &&
+              (!params.genre || book.genre.toLowerCase().includes(params.genre.toLowerCase())) &&
+              (!params.minYear || book.publication_year >= params.minYear) &&
+              (!params.maxYear || book.publication_year <= params.maxYear)
+          )
+        })
+      }
+      this.filterBooks = result.sort((a, b) => new Date(b.add_date) - new Date(a.add_date))
+    },
+    async getLostBook() {
+      const response = await sendRequest("/book/lostBook", "GET", null);
+      if (!response.ok) {
+        console.error(await response.text())
+        return;
+      }
+      this.lostBooks = await response.json();
+      console.log(this.lostBooks)
+      this.lostBooks = this.lostBooks.sort((a, b) => new Date(b.dateLost) - new Date(a.dateLost))
     },
     async getBooks() {
       try {
         const response = await sendRequest("/book", "GET", null);
         if (response.ok) {
           const data = await response.json();
-          this.books = data;
+          this.books = data.sort((a, b) => new Date(b.add_date) - new Date(a.add_date));
+          this.filterBooks = this.books;
           console.log(this.books)
         }
       } catch (e) {
@@ -115,8 +123,8 @@ export default {
 }
 
 .list-books {
-  display: flex;
-  justify-content: center;
+  /*display: flex;*/
+  /*justify-content: center;*/
 
 }
 

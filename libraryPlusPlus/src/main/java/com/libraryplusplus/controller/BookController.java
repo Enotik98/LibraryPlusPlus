@@ -9,11 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.Map;
 
 @Controller
@@ -40,7 +44,7 @@ public class BookController {
     public ResponseEntity<?> getBook(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(bookService.findById(id));
-        }catch (IllegalArgumentException FormatException) {
+        } catch (IllegalArgumentException FormatException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
@@ -66,15 +70,20 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addBook(@Valid @RequestBody BookDTO bookDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> addBook(@Valid @Validated @RequestBody BookDTO bookDTO, BindingResult bindingResult) {
         try {
-            if (bindingResult.hasErrors()){
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             bookService.addBook(bookDTO);
             return ResponseEntity.ok("add successful");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        } catch (Exception e) {
+            if (e instanceof HttpMessageNotReadableException){
+                return ResponseEntity.badRequest().body("Invalid data type");
+            }
+            return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
         }
     }
 
@@ -93,8 +102,11 @@ public class BookController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<?> updateBook(@Valid @RequestBody BookDTO bookDTO, BindingResult bindingResult) {
         try {
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
+            }
             bookService.updateBook(bookDTO);
             return ResponseEntity.ok("update successful");
         } catch (CustomException e) {

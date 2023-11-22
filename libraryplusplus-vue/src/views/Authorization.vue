@@ -23,12 +23,13 @@
         <div class="form-group">
           <label class="form-label">Confirm password</label>
           <div class="password">
-            <input class="form-control" @input="validateConfirmPassword" :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPass">
+            <input class="form-control" @input="validateConfirmPassword"
+                   :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPass">
             <span @click="showConfirmPassword = togglePasswordVisible(showConfirmPassword)">
               <i v-if="showConfirmPassword" class="fas fa-eye-slash"></i>
               <i v-else class="fas fa-eye"></i>
             </span>
-            <div class="form-text">{{validationErrors.confirmPass}}</div>
+            <div class="form-text">{{ validationErrors.confirmPass }}</div>
           </div>
         </div>
         <div class="button">
@@ -39,12 +40,13 @@
         <label class="title-card">Sing In</label>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input class="form-control" type="email" v-model="formData.email">
+          <input class="form-control" type="email" v-model="formData.email" maxlength="20">
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
           <div class="password">
-            <input class="form-control" :type="showPassword ? 'text' : 'password'" v-model="formData.password">
+            <input class="form-control " :type="showPassword ? 'text' : 'password'" v-model="formData.password"
+                   maxlength="20">
             <span @click="showPassword = togglePasswordVisible(showPassword)">
               <i v-if="showPassword" class="fas fa-eye-slash"></i>
               <i v-else class="fas fa-eye"></i>
@@ -94,35 +96,41 @@ export default {
         movingImage.style.left = `50%`;
       }
     },
-    togglePasswordVisible(showPass) {
-      showPass = !showPass;
-      return showPass
+    validationField() {
+      if (this.formData.email === "") {
+        this.$Notiflix.Notify.failure("Please fill in the email field")
+      }
+      if (this.formData.password === "") {
+        this.$Notiflix.Notify.failure("Please fill in the password field")
+      }
     },
-    validateConfirmPassword(){
-      if (this.formData.password !== this.confirmPass){
+    validateConfirmPassword() {
+      if (this.formData.password !== this.confirmPass) {
         this.validationErrors.confirmPass = "Password do not match";
-      }else {
+        return false;
+      } else {
         this.validationErrors.confirmPass = "";
+        return true;
       }
     },
     async singInForm() {
       if (this.isLoginFormVisible) {
         if (this.formData.email !== '' && this.formData.password !== '') {
-          try {
-            const response = await sendRequest('/login', 'POST', this.formData)
-            if (response.ok) {
-              const data = await response.json();
-              localStorage.setItem("Token", data['Token']);
-              this.login();
-              this.$store.dispatch('fetchUser');
+          const response = await sendRequest('/login', 'POST', this.formData)
+          console.log(await response)
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("Token", data['Token']);
+            this.login();
+            this.$store.dispatch('fetchUser');
 
-              this.$router.push('/');
-            }
-          } catch (error) {
-            console.error(error);
+            this.$router.push('/');
+          } else {
+            const errorMessage = await response.text();
+            this.$Notiflix.Notify.failure(errorMessage);
           }
         } else {
-          console.log("empty in")
+          this.validationField();
         }
       } else {
         this.toggleForm();
@@ -131,26 +139,23 @@ export default {
     },
     async singUpForm() {
       if (!this.isLoginFormVisible) {
-        if (this.formData.email !== '' && this.formData.password !== '') {
-          try {
-            const response = await sendRequest('/registration', 'POST', this.formData)
-            // console.log(await response.text())
-            if (response.ok) {
-              console.log(await response)
-              const data = await response.json();
-              localStorage.setItem("Token", data['Token']);
+        if (this.formData.email !== '' && this.formData.password !== '' && this.validateConfirmPassword()) {
+          const response = await sendRequest('/registration', 'POST', this.formData)
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("Token", data['Token']);
 
-              this.login()
-              this.$store.dispatch('fetchUser');
+            this.login()
+            this.$store.dispatch('fetchUser');
 
-              this.$router.push('/');
-
-            }
-          } catch (error) {
-            console.error(error);
+            this.$router.push('/');
+          } else {
+            const errorMessage = await response.text();
+            this.$Notiflix.Notify.failure(errorMessage);
           }
         } else {
-          console.log("empty up")
+          this.validationField();
+          this.validateConfirmPassword() ? this.$Notiflix.Notify.failure("Please fill in the password confirm field") : null;
         }
       } else {
         this.toggleForm();

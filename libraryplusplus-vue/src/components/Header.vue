@@ -6,10 +6,10 @@
       <li><router-link to="/" class="link" exact><div class="nav-item" >Catalog</div></router-link></li>
       <li v-if="!isUser"><router-link to="/orders" class="link" exact><div class="nav-item">Orders</div></router-link></li>
       <li v-if="!isUser"><router-link to="/users" class="link" exact><div class="nav-item">Users</div></router-link></li>
-      <li v-if="!isUser"><router-link to="/analytics" class="link" exact><div class="nav-item">Analytics</div></router-link></li>
-      <li><router-link to="/profile" class="link" exact><div class="nav-item" >Profile</div></router-link></li>
+      <li v-if="userRole === 'ADMIN'"><router-link to="/analytics" class="link" exact><div class="nav-item">Analytics</div></router-link></li>
+      <li v-if="isLoggedIn"><router-link to="/profile" class="link" exact><div class="nav-item" >Profile</div></router-link></li>
       <li v-if="!isLoggedIn"><router-link to="/login" class="link" exact><div class="nav-item" >Sing in</div></router-link></li>
-      <li v-else><div @click="logout" class="link"><div class="nav-item" >Log out</div></div></li>
+      <li v-else><div @click="logoutSys" class="link"><div class="nav-item" >Log out</div></div></li>
     </ul>
   </nav>
 </header>
@@ -26,11 +26,12 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['isUser', "isLoggedIn"])
+    ...mapState(['isUser', "isLoggedIn", "userRole"])
   },
   methods: {
-    logout() {
+    logoutSys() {
       this.logout();
+      this.$router.push('/');
     },
     ...mapMutations(['logout'])
   }

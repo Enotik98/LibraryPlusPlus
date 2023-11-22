@@ -28,7 +28,8 @@
         </div>
         <div class="personal-card" v-show="isHaveTicket">
           <label class="profile-title">Library Card</label>
-          <LibraryCard :user-info="user"/>
+          <p v-if="!isHaveTicket">You haven't created an electronic reader ticket. Please fill in all personal data fields to create a ticket.</p>
+          <LibraryCard v-else :user-info="user"/>
         </div>
         <div class="personal-orders">
           <label class="profile-title">My Orders</label>
@@ -65,8 +66,7 @@ export default {
     async getUserInfo(){
       const response = await sendRequest("/user/profile", "GET", null);
       if (response.ok) {
-        const data = await response.json();
-        this.user = data;
+        this.user = await response.json();
         console.log(this.user)
       }
     }

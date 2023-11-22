@@ -36,7 +36,7 @@ public class AuthController {
     public ResponseEntity<?> registration(@Valid @RequestBody AuthDTO authDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             Map<String, String> response = new HashMap<>();
 
@@ -55,22 +55,25 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody AuthDTO authDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             Map<String, String> response = new HashMap<>();
 
             User user = userService.getByEmail(authDTO.getEmail());
+            if (user == null ){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email!");
+            }
             if (user.getIsBlocked()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked!");
             }
             if (PasswordUtils.verifyPassword(authDTO.getPassword(), user.getPassword())) {
                 response.put("Token", TokenUtils.generateAccessToken(user.getId(), user.getRole()));
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email or password!");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password!");
             }
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException FormatException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values.");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
@@ -92,12 +95,4 @@ public class AuthController {
         return ResponseEntity.ok("ok");
     }
 
-//    public boolean isEmpty(Map<String, String> body) {
-//        for (Map.Entry<String, String> entry : body.entrySet()) {
-//            if (StringUtils.isEmpty(entry.getKey()) || StringUtils.isEmpty(entry.getValue())) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }

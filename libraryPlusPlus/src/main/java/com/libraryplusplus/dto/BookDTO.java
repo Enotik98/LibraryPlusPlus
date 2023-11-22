@@ -7,28 +7,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.print.attribute.standard.MediaSize;
+import javax.validation.GroupSequence;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 public class BookDTO {
     private int id;
-    @NotEmpty(message = "Title mustn't be empty")
-    @JsonDeserialize(using = CapitalizeDeserializer.class)
+    @NotEmpty(message = "Title mustn't be empty.")
     private String title;
-    @NotEmpty(message = "Author mustn't be empty")
-    @JsonDeserialize(using = CapitalizeDeserializer.class)
+    @NotEmpty(message = "Author mustn't be empty.")
     private String author;
-    @NotEmpty(message = "Genre mustn't be empty")
-    @JsonDeserialize(using = CapitalizeDeserializer.class)
+    @NotEmpty(message = "Genre mustn't be empty.")
     private String genre;
-    @NotEmpty(message = "ISBN mustn't be empty")
+    @NotEmpty(message = "ISBN mustn't be empty.")
     private String ISBN;
-    @NotNull(message = "Publication year mustn't be empty")
+    @Min(value = 1, message = "Publication year mustn't be empty.")
+//    @Pattern(regexp="^\\d+$", message="Publication year must contain only digits")
+    @NotNull(message = "Publication year mustn't be empty.")
     private int publication_year;
-    @NotNull(message = "Quantity mustn't be empty")
+//    @Pattern(regexp="^\\d+$", message="Quantity must contain only digits")
+    @Min(value = 1, message = "Quantity mustn't be empty or be more than 1.")
+    @NotNull(message = "Quantity mustn't be empty.")
     private int quantity;
     private String about;
     private Date add_date;

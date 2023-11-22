@@ -1,7 +1,8 @@
 <template>
   <div class="container d-flex justify-content-center">
     <div class="product">
-      <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">
+<!--            <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">-->
+      <img :src="book.path_img" class="card-img-left" alt="Book">
       <div class="product_body">
         <span class="card-title">{{ book.title }}</span>
         <span class="card-text">Author: {{ book.author }}</span>
@@ -9,9 +10,12 @@
         <span class="card-text">Year: {{ book.publication_year }}</span>
         <span class="card-text">ISBN: {{ book.isbn }}</span>
         <span class="card-text">{{ book.about }}</span>
-        <div>
+        <p v-if="!isAvailable" class="warning">The book isn't available. Please try to order later</p>
+        <p v-if="isSanctions" class="warning">You account has a sanctions. For details information, contact with the administrator. </p>
+        <div :class="!isAvailable ? 'disabled' : ''">
           <p>How long</p>
-          <select class="form-select" v-model="selectDays" :disabled="!isAvailable">
+          <select class="form-select" v-model="selectDays" :disabled="!isAvailable"
+                  :class="!isAvailable ? 'disabled' : ''">
             <option :value="7">1 week</option>
             <option :value="14">2 week</option>
             <option :value="21">3 week</option>
@@ -19,12 +23,14 @@
           </select>
         </div>
         <button class="btn btn-outline-dark" @click="createOrder" :disabled="!isAvailable">Add to Cart</button>
-        <div>{{ errorMess }}</div>
       </div>
     </div>
     <div class="edit-book" v-if="!isUser">
-      <button class="btn btn-outline-dark">Edit</button>
+      <button class="btn btn-outline-dark" @click="openModal">Edit</button>
     </div>
+    <ModalWindow ref="ModalWindow">
+      <CreateBook :edit-book="book" :modalClose="() => {this.$refs.ModalWindow.closeModal()}"/>
+    </ModalWindow>
     <!--    {{ $route.params.id }}-->
   </div>
 </template>
@@ -34,11 +40,13 @@ import {sendRequest} from "@/scripts/request";
 // import Header from "@/components/Header.vue";
 import {calculateDate} from "@/scripts/utils";
 import {mapState} from "vuex";
+import ModalWindow from "@/components/ModalWindow.vue";
+import CreateBook from "@/components/CreateBook.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Product",
-  components: {},
+  components: {CreateBook, ModalWindow},
   data() {
     return {
       book: {},
@@ -52,12 +60,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isUser', 'isLoggedIn'])
+    ...mapState(['isUser', 'isLoggedIn', "isSanctions"])
   },
   mounted() {
     this.getBook();
   },
   methods: {
+    openModal() {
+      this.$refs.ModalWindow.openModal();
+    },
     async getBook() {
       try {
         const response = await sendRequest("/book/" + this.$route.params.id, "GET", null);
@@ -83,9 +94,11 @@ export default {
       if (!response.ok) {
         if (response.status === 403) {
           this.errorMess = await response.text();
+          this.$Notiflix.Notify.failure(this.errorMess)
         }
-        console.log("error")
+        return;
       }
+      this.$Notiflix.Notify.success("The book has been added!")
     }
   }
 }
@@ -125,6 +138,14 @@ export default {
 
 .card-title {
   font-size: 1.7em;
+}
+
+.warning {
+  color: #ff4013;
+}
+
+.disabled {
+  opacity: .7;
 }
 
 .edit-book {

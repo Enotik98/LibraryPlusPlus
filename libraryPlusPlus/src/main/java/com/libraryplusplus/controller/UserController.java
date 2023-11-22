@@ -62,6 +62,8 @@ public class UserController {
         try {
             int id = Integer.parseInt(body.get("id"));
             Role role = Role.valueOf(body.get("role").toUpperCase());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println(authentication);
 
             userService.updateUserRole(id, role);
             return ResponseEntity.ok("update successful");
@@ -76,7 +78,7 @@ public class UserController {
     public ResponseEntity<?> updateUserTicket(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             int userId = Integer.parseInt(authentication.getName());
@@ -92,13 +94,19 @@ public class UserController {
     }
 
     @PostMapping("/restriction")
-    public ResponseEntity<?> updateRestrictionAndRole(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> updateRestriction(@RequestBody Map<String, String> body) {
         try {
             int id = Integer.parseInt(body.get("id"));
             boolean sanctions = Boolean.parseBoolean(body.get("isSanctions"));
             boolean blocked = Boolean.parseBoolean(body.get("isBlocked"));
 
-            userService.updateRestrictions(id, sanctions, blocked);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            int tokenId = Integer.parseInt(authentication.getName());
+            String role = authentication.getAuthorities().iterator().next().getAuthority();
+            if (tokenId == id) {
+                throw new CustomException(HttpStatus.FORBIDDEN, "You can't update your restrictions");
+            }
+            userService.updateRestrictions(id, sanctions, blocked, role);
             return ResponseEntity.ok("update successful");
         } catch (IllegalArgumentException FormatException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");

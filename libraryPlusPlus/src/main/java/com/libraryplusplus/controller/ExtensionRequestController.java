@@ -51,7 +51,7 @@ public class ExtensionRequestController {
     public ResponseEntity<?> addRequest(@Valid @RequestBody ExtensionRequestDTO extensionRequestDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             extensionRequestDTO.setUser_id(Integer.parseInt(authentication.getName()));
@@ -65,11 +65,11 @@ public class ExtensionRequestController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateRequest(@Valid @RequestBody ExtensionRequestDTO extensionRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> updateRequest(@Valid @RequestBody ExtensionRequestDTO extensionRequestDTO, BindingResult bindingResult ) {
         try {
             System.out.println(extensionRequestDTO);
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             if (extensionRequestDTO.getStatus() == null) {
                 return ResponseEntity.badRequest().body("The status is incorrect");

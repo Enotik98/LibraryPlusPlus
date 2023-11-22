@@ -106,8 +106,12 @@ public class OrderService {
             if (status.equals(Status.RETURNED)) {
                 Date currentDate = new Date();
                 order.setReturnedLate(currentDate.after(order.getReturn_date()));
-
-//                may be make when book was returned
+                if (order.getReturnedLate()){
+                    User user = order.getUser();
+                    user.setIsSanctions(true);
+                    userRepository.save(user);
+                }
+//                maybe make when book was returned
 //                order.setReturn_date(currentDate);
 
             }

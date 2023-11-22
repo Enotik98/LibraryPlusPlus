@@ -7,6 +7,8 @@
       <select class="form-select" v-model="report">
         <option value="genre">Popularity of book genre</option>
         <option value="books">Popularity of books</option>
+        <option value="restrictions">Restrictions Users</option>
+        <option value="lostBooks">Lost Books</option>
       </select>
       <button @click="getReport" class="btn btn-outline-dark w-100">Get</button>
 
@@ -70,13 +72,26 @@ export default {
     async getReport() {
       try {
         let path = "";
+        let method = ""
         switch (this.report) {
           case "genre": {
             path = "genre-excel";
+            method = "POST";
             break;
           }
           case "books": {
             path = "book-excel";
+            method = "POST";
+            break;
+          }
+          case "restrictions": {
+            path = "restrictions_excel";
+            method = "GET";
+            break;
+          }
+          case "lostBooks": {
+            path = "lost_book_excel";
+            method = "GET";
             break;
           }
           default :
@@ -84,7 +99,7 @@ export default {
         }
         this.period.start = this.date[0];
         this.period.end = this.date[1];
-        const response = await sendRequest("/analytics/" + path, "POST", this.period);
+        const response = await sendRequest("/analytics/" + path, method, (method === "GET") ? null : this.period);
 
         if (!response.ok) {
           console.error("error ");
@@ -103,7 +118,7 @@ export default {
 
 <style scoped>
 .analytics {
-  width: 40em;
+  min-width: 40em;
 }
 
 .analytics > label {

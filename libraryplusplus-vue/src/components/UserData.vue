@@ -83,18 +83,17 @@ export default {
       }
 
       this.$emit('checkTicket', checkTicket);
-      // this.editUser.first_name = this.user.first_name;
-      // this.editUser.last_name = this.user.last_name;
-      // this.editUser.email = this.user.email;
-      // this.editUser.phone = this.user.phone;
-      // this.editUser.address = this.user.address;
+
     },
     async updateUser() {
       const response = await sendRequest("/user/ticket", "PUT", this.editUser);
       if (response.ok) {
         this.updateEditUser();
         this.$emit('updateUserInfo');
-        console.log("send")
+      }
+      if (response.status === 400){
+        const error = await response.text();
+        this.$Notiflix.Notify.failure(error);
       }
     }
   }

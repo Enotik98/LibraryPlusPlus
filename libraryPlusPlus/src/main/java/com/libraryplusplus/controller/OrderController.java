@@ -66,7 +66,7 @@ public class OrderController {
     public ResponseEntity<?> addOrder(@Valid @RequestBody OrderDTO orderDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult));
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
             }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             int userId = Integer.parseInt(authentication.getName());

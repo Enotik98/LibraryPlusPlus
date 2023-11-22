@@ -1,4 +1,5 @@
 const BASE_URL = 'http://localhost:8080';
+import store from "@/scripts/store";
 
 export async function sendRequest(url, method, data){
     console.log(method + " " + url)
@@ -18,8 +19,9 @@ export async function sendRequest(url, method, data){
     const response = await fetch(BASE_URL + url, request);
     if (response.status === 401){
         localStorage.clear();
-        this.$store.logout();
-        return this.$router.push("/login")
+        console.log(store.isLoggedIn);
+        if (store.isLoggedIn) store.logout();
+        return response;
     }
     return response;
 }

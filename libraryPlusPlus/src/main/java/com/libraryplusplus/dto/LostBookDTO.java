@@ -17,15 +17,15 @@ import java.util.Date;
 public class LostBookDTO {
     private int id;
     @NotNull
-    private int book_id;
-    private int order_id;
+    private Book book;
+    private Order order;
     @Temporal(TemporalType.DATE)
     private Date dateLost;
     public static LostBookDTO ConvertToDTO(LostBook book){
         LostBookDTO dto = new LostBookDTO();
         dto.setId(book.getId());
-        dto.setBook_id(book.getBook().getId());
-        dto.setOrder_id(book.getOrder().getId());
+        dto.setBook(book.getBook());
+//        dto.setOrder(book.getOrder());
         dto.setDateLost(book.getDateLost());
         return dto;
     }

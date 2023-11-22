@@ -12,16 +12,16 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class UserDTO {
     private int id;
-    @NotEmpty (message = "First name is empty")
+    @NotEmpty (message = "First name is empty.")
     private String first_name;
-    @NotEmpty (message = "Last name is empty")
+    @NotEmpty (message = "Last name is empty.")
     private String last_name;
-    @NotEmpty(message = "Email is empty")
+    @NotEmpty(message = "Email is empty.")
     private String email;
 
-    @NotEmpty (message = "Phone name is empty")
+    @NotEmpty (message = "Phone name is empty.")
     private String phone;
-    @NotEmpty (message = "Address name is empty")
+    @NotEmpty (message = "Address name is empty.")
     private String address;
     private Role role;
     private String password;

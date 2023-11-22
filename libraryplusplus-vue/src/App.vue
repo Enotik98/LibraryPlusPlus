@@ -28,6 +28,13 @@ html, body {
   padding: 0;
   height: 100vh;
 }
+.title {
+  color: var(--blue-opacity);
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
 #app {
   font-family: Inter, sans-serif;
   /*font-family: Avenir, Helvetica, Arial, sans-serif;*/

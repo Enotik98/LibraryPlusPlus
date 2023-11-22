@@ -60,7 +60,7 @@ public class LostBookService {
             if (lostBookRepository.findByBookAndOrderAndAndDateLost(book, order, new Date()) != null) {
                 throw new CustomException(HttpStatus.BAD_REQUEST, "Such a request has already been added");
             }
-            user.setIsSanctions(true);
+            user.setIsBlocked(true);
             userRepository.save(user);
 
             LostBook lostBook = LostBookDTO.CreatLostBook(book, order);
