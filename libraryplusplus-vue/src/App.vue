@@ -1,7 +1,7 @@
 <template>
   <Header v-if="showHeader" />
   <router-view class="main-body"/>
-  <Info />
+  <Info v-if="showHeader"/>
 </template>
 <script>
 export default {

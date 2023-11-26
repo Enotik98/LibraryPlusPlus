@@ -1,42 +1,45 @@
 <template>
   <div class="book">
     <form class="form-book" @submit.prevent="submitFormBook">
-      <label class="title-card">Create Book</label>
+      <label v-if="!editBook" class="title-card">Add Book</label>
+      <label v-else class="title-card">Edit Book</label>
       <div class="form-group">
-        <label class="form-label">Title</label>
-        <input class="form-control" type="text" v-model="book.title">
+        <label >Image</label>
+        <textarea class="form-control" type="text" v-model="book.path_img" rows="1" placeholder="Image Url"/>
+      </div>
+      <div>
+        <label>Title</label>
+        <input class="form-control" type="text" v-model="book.title" placeholder="Title">
       </div>
       <div class="form-group">
-        <label class="form-label">Author</label>
-        <input class="form-control" type="text" v-model="book.author">
+        <label>Author</label>
+        <input class="form-control" type="text" v-model="book.author" placeholder="Author">
       </div>
       <div class="form-group">
-        <label class="form-label">Genre</label>
-        <input class="form-control" type="text" v-model="book.genre">
+        <label>Genre</label>
+        <input class="form-control" type="text" v-model="book.genre" placeholder="Genre">
+      </div>
+      <div class="book-input-group">
+        <div class="form-group pe-1">
+          <label>ISBN</label>
+          <input class="form-control" type="text" v-model="book.isbn" placeholder="ISNB">
+        </div>
+        <div class="form-group px-1">
+          <label>Publication Year</label>
+          <input class="form-control" type="text" v-model="book.publication_year" placeholder="Publication Year">
+        </div>
+        <div class="form-group ps-1">
+          <label>Quantity</label>
+          <input class="form-control" type="text" v-model="book.quantity" placeholder="Quantity">
+        </div>
       </div>
       <div class="form-group">
-        <label class="form-label">isbn</label>
-        <input class="form-control" type="text" v-model="book.isbn">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Year</label>
-        <input class="form-control" type="text" v-model="book.publication_year">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Quantity</label>
-        <input class="form-control" type="text" v-model="book.quantity">
-      </div>
-      <div class="form-group">
-        <label class="form-label">About</label>
-        <textarea class="form-control" type="text" v-model="book.about" rows="4"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Path image</label>
-        <textarea class="form-control" type="text" v-model="book.path_img" rows="2"/>
+        <label>About</label>
+        <textarea class="form-control" type="text" v-model="book.about" rows="7" placeholder="About"/>
       </div>
       <div class="button">
-        <button v-if="!editBook" type="submit" class="btn btn-outline-dark">Create</button>
-        <button v-else type="submit" class="btn btn-outline-dark">Save</button>
+        <button v-if="!editBook" type="submit" class="btn btn-outline-dark">Add Book</button>
+        <button v-else type="submit" class="btn btn-outline-dark">Save Book</button>
       </div>
     </form>
   </div>
@@ -107,21 +110,34 @@ export default {
 <style scoped>
 .book {
   width: 40em;
-  padding: 0 2em;
+  padding: 0 1em;
+  color: #000;
+  /*font-family: Inter,serif;*/
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
 }
 
 .title-card {
-  width: 100%;
-  text-align: center;
+  font-size: 1.2em;
+}
+.book-input-group {
+  display: flex;
 }
 
 .form-group {
-  margin: 1em 0;
+  margin: .5em 0;
+}
+
+.form-group > label {
+  padding-bottom: .4em;
 }
 
 .button {
   display: flex;
-  justify-content: center;
+  justify-content: end;
 }
 
 .button button {

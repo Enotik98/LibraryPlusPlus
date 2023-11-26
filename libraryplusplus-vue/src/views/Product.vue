@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="edit-book" v-if="!isUser">
-      <button class="btn btn-outline-dark" @click="openModal">Edit</button>
+      <button class="btn btn-outline-dark mb-1" @click="openModal">Edit</button>
       <button class="btn btn-outline-danger" @click="deleteBook">Delete</button>
     </div>
     <ModalWindow ref="ModalWindow">
@@ -162,6 +162,8 @@ export default {
 .edit-book {
   margin-top: 3em;
   padding-left: 1em;
+  display: flex;
+  flex-direction: column;
 }
 
 .edit-book > button {

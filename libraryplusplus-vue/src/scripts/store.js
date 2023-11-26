@@ -6,7 +6,8 @@ const store = createStore({
         isLoggedIn: !!localStorage.getItem("Token"),
         isUser: true,
         userRole: "USER",
-        isSanctions: false,
+        isSanctions: true,
+        isBlocked: true
     },
     mutations: {
         login(state) {
@@ -14,16 +15,27 @@ const store = createStore({
             if (state.isLoggedIn) state.isUser = true;
         },
         setUser(state, values) {
-            state.isUser = values["role"] === "USER"
-            state.userRole = values["role"];
-            state.isSanctions = values["sanctions"];
-            console.log("User " + state.isUser + " s " + state.isSanctions)
+            if (values["blocked"]) {
+                localStorage.clear();
+                state.isLoggedIn = false;
+                state.isUser = true;
+                state.isSanctions = true;
+                state.isBlocked = true;
+            } else {
+                console.log("state")
+                state.isUser = values["role"] === "USER"
+                state.userRole = values["role"];
+                state.isSanctions = values["sanctions"];
+                state.isBlocked = values["blocked"];
+                console.log("User " + state.isUser + " s " + state.isSanctions)
+            }
         },
         logout(state) {
             localStorage.clear();
             state.isLoggedIn = false;
             state.isUser = true;
-            state.isSanctions = false;
+            state.isSanctions = true;
+            state.isBlocked = true;
         }
     },
     actions: {
@@ -33,7 +45,10 @@ const store = createStore({
                 const response = await sendRequest("/user/profile", "GET", null);
                 if (response.ok) {
                     const data = await response.json();
-                    commit('setUser', {role: data['role'], sanctions: data['isSanctions']})
+                    commit('setUser', {role: data['role'], sanctions: data['isSanctions'], blocked: data['isBlocked']})
+                }else {
+                    // commit('setUser', {role: "USER", sanctions: true, blocked: true})
+                    commit("logout");
                 }
             }
         }
