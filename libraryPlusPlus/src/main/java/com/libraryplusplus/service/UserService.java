@@ -2,8 +2,10 @@ package com.libraryplusplus.service;
 
 import com.libraryplusplus.dto.AuthDTO;
 import com.libraryplusplus.dto.UserDTO;
+import com.libraryplusplus.entity.Order;
 import com.libraryplusplus.entity.Role;
 import com.libraryplusplus.entity.User;
+import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.repository.UserRepository;
 import com.libraryplusplus.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     public List<UserDTO> getAllUser() {
         try {
@@ -30,11 +34,12 @@ public class UserService {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-    public UserDTO getUserById(int id){
-        try{
+
+    public UserDTO getUserById(int id) {
+        try {
             User user = userRepository.findById(id);
             return UserDTO.ConvertToDTO(user);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -85,7 +90,7 @@ public class UserService {
             if (user == null) {
                 throw new CustomException(HttpStatus.NOT_FOUND, "Account not found");
             }
-            if (tokenUserRole.equals("ROLE_LIBRARIAN") && user.getRole().equals(Role.ADMIN)){
+            if (tokenUserRole.equals("ROLE_LIBRARIAN") && user.getRole().equals(Role.ADMIN)) {
                 throw new CustomException(HttpStatus.FORBIDDEN, "No access to edit this account.");
             }
 
@@ -118,7 +123,13 @@ public class UserService {
     public void deleteUser(int id) {
         try {
             //add check order with status
-            userRepository.deleteById(id);
+            List<Order> userOrders = orderRepository.findAllByUserIdByStatus(id);
+            boolean shouldDelete = userOrders.stream().allMatch(order -> List.of("LOST", "AWAITING", "CHECKOUT").contains(order.getStatus()));
+            if (shouldDelete) {
+                userRepository.deleteById(id);
+            } else {
+                throw new CustomException(HttpStatus.BAD_REQUEST, "This account can't be deleted, it has unfinished orders or has lost books.");
+            }
         } catch (Exception e) {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

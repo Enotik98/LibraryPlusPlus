@@ -35,7 +35,8 @@ import {sendRequest} from "@/scripts/request";
 export default {
   name: "OrderDetailModal",
   props: {
-    order: Object
+    order: Object,
+    closeModalWindow: Function,
   },
   data() {
     return {

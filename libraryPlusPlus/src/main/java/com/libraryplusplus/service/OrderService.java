@@ -1,9 +1,11 @@
 package com.libraryplusplus.service;
 
+import com.libraryplusplus.dto.ExtensionRequestDTO;
 import com.libraryplusplus.dto.FullOrderDTO;
 import com.libraryplusplus.dto.OrderDTO;
 import com.libraryplusplus.entity.*;
 import com.libraryplusplus.repository.BookRepository;
+import com.libraryplusplus.repository.ExtensionRequestRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.repository.UserRepository;
 import com.libraryplusplus.utils.CustomException;
@@ -29,6 +31,10 @@ public class OrderService {
     BookService bookService;
     @Autowired
     LostBookService lostBookService;
+    @Autowired
+    ExtensionRequestRepository extensionRequestRepository;
+    @Autowired
+    ExtensionRequestService extensionRequestService;
 
     public List<FullOrderDTO> findAllOrders() {
         try {
@@ -104,6 +110,8 @@ public class OrderService {
                 }
             }
             if (status.equals(Status.RETURNED)) {
+                order = checkExtensionRequest(order, RequestStatus.APPROVED);
+
                 Date currentDate = new Date();
                 order.setReturnedLate(currentDate.after(order.getReturn_date()));
                 if (order.getReturnedLate()){
@@ -116,6 +124,7 @@ public class OrderService {
 
             }
             if (status.equals(Status.LOST)) {
+                order = checkExtensionRequest(order, RequestStatus.REJECTED);
                 lostBookService.addLostBook(order.getId());
             }
             order.setStatus(status);
@@ -164,6 +173,24 @@ public class OrderService {
                 throw new CustomException(HttpStatus.NOT_FOUND, "The order can't be canceled");
             }
             orderRepository.deleteById(id);
+        } catch (CustomException customException) {
+            throw new CustomException(customException.getStatus(), customException.getMessage());
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    private Order checkExtensionRequest(Order order, RequestStatus requestStatus) {
+        try {
+            ExtensionRequest orderExtensionRequest = extensionRequestRepository.findAllByOrderAndStatus(order, RequestStatus.PENDING);
+            if (orderExtensionRequest != null){
+                System.out.println("er not null");
+                orderExtensionRequest.setStatus(requestStatus);
+                extensionRequestRepository.save(orderExtensionRequest);
+                order.setReturn_date(orderExtensionRequest.getNew_return_date());
+                return order;
+            }
+            return order;
         } catch (CustomException customException) {
             throw new CustomException(customException.getStatus(), customException.getMessage());
         } catch (Exception e) {

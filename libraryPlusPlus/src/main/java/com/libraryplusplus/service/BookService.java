@@ -2,9 +2,11 @@ package com.libraryplusplus.service;
 
 import com.libraryplusplus.dto.BookDTO;
 import com.libraryplusplus.entity.Book;
+import com.libraryplusplus.entity.Order;
 import com.libraryplusplus.repository.BookRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.utils.CustomException;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -71,9 +73,9 @@ public class BookService {
             if (exBook == null) {
                 throw new CustomException(HttpStatus.NOT_FOUND, "Book not found");
             }
-            if (!exBook.getTitle().equals(bookDTO.getTitle())){
+            if (!exBook.getTitle().equals(bookDTO.getTitle())) {
                 Book titleBook = bookRepository.findByTitle(bookDTO.getTitle());
-                if (titleBook != null){
+                if (titleBook != null) {
                     throw new CustomException(HttpStatus.CONFLICT, "A book with this title already exists");
                 }
             }
@@ -89,8 +91,14 @@ public class BookService {
 
     public void deleteBook(int id) {
         try {
-            bookRepository.deleteById(id);
-        }catch (Exception e){
+            List<Order> bookOrder = orderRepository.findAllByBookIdByStatus(id);
+            boolean shouldDelete = bookOrder.stream().allMatch(order -> List.of("AWAITING", "CHECKOUT").contains(order.getStatus()));
+            if (shouldDelete) {
+                bookRepository.deleteById(id);
+            } else {
+                throw new CustomException(HttpStatus.BAD_REQUEST, "This book can't be deleted, it has unfinished orders.");
+            }
+        } catch (Exception e) {
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

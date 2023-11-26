@@ -74,7 +74,7 @@ public class ExtensionRequestService {
                     throw new CustomException(HttpStatus.NOT_FOUND, "Order id doesn't match");
                 }
                 if (exRequest.getStatus().equals(extensionRequestDTO.getStatus())) {
-                    throw new CustomException(HttpStatus.OK, "The status hasn't changed");
+                    throw new CustomException(HttpStatus.BAD_REQUEST, "The status hasn't changed");
                 } else {
                     exRequest.setStatus(extensionRequestDTO.getStatus());
                     exRequest.setNew_return_date(extensionRequestDTO.getNew_return_date());

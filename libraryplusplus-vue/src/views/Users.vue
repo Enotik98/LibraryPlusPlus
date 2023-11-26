@@ -29,7 +29,7 @@
     </table>
   </div>
   <ModalWindow ref="ModalWindow">
-    <UserModal :user-info="chooseUser"/>
+    <UserModal :user-info="chooseUser" :close-modal-window="() => {this.$refs.ModalWindow.closeModal()}"/>
   </ModalWindow>
 </template>
 

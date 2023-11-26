@@ -48,7 +48,7 @@
   </table>
 </div>
   <ModalWindow ref="ModalWindow">
-    <OrderDetailModal :order="chooseOrder"/>
+    <OrderDetailModal :order="chooseOrder" :close-modal-window="() => { this.$refs.ModalWindow.closeModal() }"/>
   </ModalWindow>
 </template>
 

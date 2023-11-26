@@ -14,7 +14,7 @@
         <p class="title">Restrictions</p>
         <div class="form-check">
           <input type="checkbox" class="form-check-input" v-model="this.restriction.isSanctions"
-                 :disabled="userRole === 'LIBRARIAN'" >
+                 :disabled="userRole === 'LIBRARIAN'">
           <label>Sanctions</label>
         </div>
         <div class="form-check">
@@ -43,6 +43,7 @@
           </div>
         </div>
         <button @click="updateRole" class="btn">Save Role</button>
+        <button @click="deleteUser" class="btn btn-outline-danger">Delete</button>
       </div>
     </div>
 
@@ -56,7 +57,8 @@ import {sendRequest} from "@/scripts/request";
 export default {
   name: "UserModal",
   props: {
-    userInfo: Object
+    userInfo: Object,
+    closeModalWindow: Function,
   },
   data() {
     return {
@@ -106,6 +108,16 @@ export default {
         return;
       }
       this.user = await response.json();
+    },
+    async deleteUser() {
+      const response = await sendRequest("/user", "DELETE", {id: this.user.id})
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        this.$Notiflix.Notify.failure(errorMessage);
+      } else {
+        this.$Notiflix.Notify.success("deleted successful!");
+        this.closeModalWindow();
+      }
     }
   }
 

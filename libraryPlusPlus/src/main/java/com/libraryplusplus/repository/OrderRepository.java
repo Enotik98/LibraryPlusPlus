@@ -16,6 +16,10 @@ import java.util.Map;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     Order findById(int id);
     List<Order> findAllByUser(User user);
+    @Query("SELECT o from orders o WHERE o.user.id = :userId AND o.status IN ('AWAITING', 'CHECKOUT', 'LOST')")
+    List<Order> findAllByUserIdByStatus(@Param("userId") int userID);
+    @Query("SELECT o from orders o WHERE o.book.id = :bookId AND o.status IN ('AWAITING', 'CHECKOUT')")
+    List<Order> findAllByBookIdByStatus(@Param("bookId") int BookID);
 
     @Query("select COUNT(o) from orders o where o.book = :book_id and o.status IN ('AWAITING', 'CHECKOUT')")
     int countTakenBook(@Param("book_id")Book book);

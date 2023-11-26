@@ -115,4 +115,19 @@ public class UserController {
         }
 
     }
+
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteUser(@RequestBody Map<String, String> body) {
+        try {
+            int userID = Integer.parseInt(body.get("id"));
+            if (userID != 0){
+                userService.deleteUser(userID);
+            }
+            return ResponseEntity.ok("deleted");
+        } catch (IllegalArgumentException FormatException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
 }

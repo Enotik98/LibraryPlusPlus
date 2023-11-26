@@ -1,7 +1,7 @@
 <template>
   <div class="container d-flex justify-content-center ">
     <div class="product">
-<!--            <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">-->
+      <!--            <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">-->
       <img :src="book.path_img" class="card-img-left" alt="Book">
       <div class="product_body">
         <span class="card-title">{{ book.title }}</span>
@@ -11,7 +11,8 @@
         <span class="card-text">ISBN: {{ book.isbn }}</span>
         <span class="card-text">{{ book.about }}</span>
         <p v-if="!isAvailable" class="warning">The book isn't available. Please try to order later</p>
-        <p v-if="isSanctions" class="warning">You account has a sanctions. For details information, contact with the administrator. </p>
+        <p v-if="isSanctions" class="warning">You account has a sanctions. For details information, contact with the
+          administrator. </p>
         <div :class="!isAvailable ? 'disabled' : ''">
           <p>How long</p>
           <select class="form-select" v-model="selectDays" :disabled="!isAvailable"
@@ -27,6 +28,7 @@
     </div>
     <div class="edit-book" v-if="!isUser">
       <button class="btn btn-outline-dark" @click="openModal">Edit</button>
+      <button class="btn btn-outline-danger" @click="deleteBook">Delete</button>
     </div>
     <ModalWindow ref="ModalWindow">
       <CreateBook :edit-book="book" :modalClose="() => {this.$refs.ModalWindow.closeModal()}"/>
@@ -99,6 +101,15 @@ export default {
         return;
       }
       this.$Notiflix.Notify.success("The book has been added!")
+    },
+    async deleteBook() {
+      const response = await sendRequest("/book", "DELETE", {id: this.book.id});
+      if (!response.ok) {
+        this.errorMess = await response.text();
+        this.$Notifix.Notify.failure(this.errorMess);
+      }
+      this.$Notifix.Notify.success("Deleted successful!");
+      this.$router.go(-1);
     }
   }
 }
