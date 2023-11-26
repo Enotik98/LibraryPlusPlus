@@ -1,6 +1,7 @@
 <template>
   <Header v-if="showHeader" />
-  <router-view/>
+  <router-view class="main-body"/>
+  <Info />
 </template>
 <script>
 export default {
@@ -28,6 +29,9 @@ html, body {
   padding: 0;
   height: 100vh;
 }
+.main-body {
+  padding-bottom: 5em;
+}
 .title {
   color: var(--blue-opacity);
   font-size: 1.5rem;
@@ -47,4 +51,5 @@ html, body {
 </style>
 <script setup>
 import Header from "@/components/Header.vue";
+import Info from "@/components/InfoIcon.vue";
 </script>

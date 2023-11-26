@@ -1,6 +1,6 @@
 <template>
   <div class="container justify-content-center d-flex">
-    <div class="back-link"><span @click="$router.go(-1)">Back</span></div>
+    <div class="back-link" @click="$router.go(-1)"><i class="fa-solid fa-chevron-left" style="color: #000000;"></i><span>Back</span></div>
     <div class="order card">
       <label class="title">Order {{order.id}}</label>
       <p>Book: {{ book.title }}</p>
@@ -145,7 +145,7 @@ export default {
 <style scoped>
 .back-link {
   margin-top: 2em;
-  padding: 0 1em 1em;
+  padding: 0 2em 1em;
 }
 .order {
   width: 40em;

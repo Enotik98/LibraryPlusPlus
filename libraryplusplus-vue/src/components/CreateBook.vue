@@ -28,11 +28,11 @@
       </div>
       <div class="form-group">
         <label class="form-label">About</label>
-        <input class="form-control" type="text" v-model="book.about">
+        <textarea class="form-control" type="text" v-model="book.about" rows="4"/>
       </div>
       <div class="form-group">
         <label class="form-label">Path image</label>
-        <input class="form-control" type="text" v-model="book.path_img">
+        <textarea class="form-control" type="text" v-model="book.path_img" rows="2"/>
       </div>
       <div class="button">
         <button v-if="!editBook" type="submit" class="btn btn-outline-dark">Create</button>

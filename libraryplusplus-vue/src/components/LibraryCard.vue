@@ -29,7 +29,7 @@
         <span class="name">{{userInfo.first_name}} {{userInfo.last_name}}</span>
         <span class="info">{{userInfo.email}}</span>
         <span class="info">+38{{userInfo.phone}}</span>
-        <span class="address">St.{{userInfo.address}}</span>
+        <span class="address">{{address.city}}, St.{{address.street}} {{address.houseNumber}}, {{address.apartmentNumber}}</span>
       </div>
     </div>
   </div>
@@ -43,6 +43,15 @@ export default {
   name: "LibraryCard",
   props: {
     userInfo: Object
+  },
+  data() {
+    return {
+      address: {}
+    }
+  },
+  mounted() {
+    if (this.userInfo.address) this.address = JSON.parse(this.userInfo.address);
+    console.log(this.address)
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex justify-content-center">
+  <div class="container d-flex justify-content-center ">
     <div class="product">
 <!--            <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">-->
       <img :src="book.path_img" class="card-img-left" alt="Book">

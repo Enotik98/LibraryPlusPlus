@@ -27,6 +27,10 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  height: 100%;
+  position: relative;
+}
 .img {
   width: 100%;
   height: 20em;
@@ -35,6 +39,7 @@ export default {
 
 .card-body {
   padding: .5em;
+  position: relative;
 }
 
 .card_header {
@@ -59,8 +64,10 @@ export default {
 
 .card_footer {
   display: flex;
-  justify-content: end;
-  margin-top: 1.2em;
+  justify-content: flex-end;
+  margin-top: auto;
   font-size: .9em;
+  align-items: flex-end;
+  /*bottom: 0;*/
 }
 </style>

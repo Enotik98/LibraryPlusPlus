@@ -4,7 +4,7 @@
       <div class="moving-image">
         <img class="" src="../assets/Alternative.jpg">
       </div>
-      <form @submit.prevent="singUpForm" class="sign-up ">
+      <form @submit.prevent="signUpForm" class="sign-up ">
         <label class="title-card">Sign up</label>
         <div class="form-group">
           <label class="form-label">Email</label>
@@ -33,11 +33,11 @@
           </div>
         </div>
         <div class="button">
-          <button class="btn btn-outline-dark" type="submit">Sing up</button>
+          <button class="btn btn-outline-dark" type="submit">Sign up</button>
         </div>
       </form>
-      <form @submit.prevent="singInForm" class="sign-in">
-        <label class="title-card">Sing In</label>
+      <form @submit.prevent="signInForm" class="sign-in">
+        <label class="title-card">Sign In</label>
         <div class="form-group">
           <label class="form-label">Email</label>
           <input class="form-control" type="email" v-model="formData.email" maxlength="20">
@@ -113,7 +113,7 @@ export default {
         return true;
       }
     },
-    async singInForm() {
+    async signInForm() {
       if (this.isLoginFormVisible) {
         if (this.formData.email !== '' && this.formData.password !== '') {
           const response = await sendRequest('/login', 'POST', this.formData)
@@ -137,7 +137,7 @@ export default {
       }
 
     },
-    async singUpForm() {
+    async signUpForm() {
       if (!this.isLoginFormVisible) {
         if (this.formData.email !== '' && this.formData.password !== '' && this.validateConfirmPassword()) {
           const response = await sendRequest('/registration', 'POST', this.formData)
