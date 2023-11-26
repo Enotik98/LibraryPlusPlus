@@ -5,12 +5,9 @@
     </div>
     <div class="list-books">
       <div class="card-grid" v-if="showLostBook">
-        <!--        <div v-if="showLostBook">-->
-
         <div v-for="lost in lostBooks" :key="lost.id" class="card-item">
           <CardBook :book="lost.book" style="opacity: .5;"/>
         </div>
-        <!--        </div>-->
       </div>
       <div class="card-grid">
         <div v-for="book in filterBooks" :key="book.id" class="card-item">
@@ -68,14 +65,17 @@ export default {
     applyFilterBook(params) {
       let result = this.books;
       this.showLostBook = params.lostBook
-      if (params.title || params.minYear || params.maxYear || params.author || params.genre) {
+      if (params.title || params.year[0] || params.year[1] || params.author || params.genre.length > 0) {
+        console.log(params.genre)
         result = result.filter(book => {
+          const includesGenre = params.genre.length === 0 || params.genre.some(genre => (!genre || book.genre.toLowerCase().includes(genre.toLowerCase())));
+          console.log(includesGenre)
           return (
               (!params.title || book.title.toLowerCase().includes(params.title.toLowerCase())) &&
               (!params.author || book.author.toLowerCase().includes(params.author.toLowerCase())) &&
-              (!params.genre || book.genre.toLowerCase().includes(params.genre.toLowerCase())) &&
-              (!params.minYear || book.publication_year >= params.minYear) &&
-              (!params.maxYear || book.publication_year <= params.maxYear)
+              includesGenre &&
+              (!params.year[0] || book.publication_year >= params.year[0]) &&
+              (!params.year[1] || book.publication_year <= params.year[1])
           )
         })
       }
@@ -88,24 +88,19 @@ export default {
         return;
       }
       this.lostBooks = await response.json();
-      console.log(this.lostBooks)
       this.lostBooks = this.lostBooks.sort((a, b) => new Date(b.dateLost) - new Date(a.dateLost))
     },
     async getBooks() {
-      try {
         const response = await sendRequest("/book", "GET", null);
         if (response.ok) {
           const data = await response.json();
           this.books = data.sort((a, b) => new Date(b.add_date) - new Date(a.add_date));
           this.filterBooks = this.books;
-          console.log(this.books)
+        }else {
+          console.error(await response.json())
         }
-      } catch (e) {
-        console.error(e)
       }
     }
-
-  }
 }
 </script>
 <style scoped>

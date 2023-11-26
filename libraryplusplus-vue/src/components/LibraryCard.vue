@@ -42,16 +42,15 @@
 export default {
   name: "LibraryCard",
   props: {
-    userInfo: Object
+    userInfo: Object,
+    address: Object
   },
   data() {
     return {
-      address: {}
+
     }
   },
   mounted() {
-    if (this.userInfo.address) this.address = JSON.parse(this.userInfo.address);
-    console.log(this.address)
   }
 }
 </script>

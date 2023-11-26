@@ -53,19 +53,26 @@ export default {
     formatDate,
     async createRequest() {
       if (this.selectedDay === 0) return;
-      console.log(this.order.return_date)
       this.request.new_return_date = calculateDate(this.order.return_date, this.selectedDay);
 
       const response = await sendRequest("/extension_request", "POST", this.request);
       if (!response.ok){
-        console.error(await response.text())
+        const errorMessage = await response.text();
+        this.$Notiflix.Notify.failure(errorMessage);
+      }else {
+        this.$Notiflix.Notify.success("Successful!")
+        this.closeModalWindow();
       }
 
     },
     async cancelOrder() {
       const response = await sendRequest("/order/cancel", "POST", {id: this.order.id});
       if (!response.ok){
-        console.error(await response.text());
+        const errorMessage = await response.text();
+        this.$Notiflix.Notify.failure(errorMessage);
+      }else {
+        this.$Notiflix.Notify.success("Successful!")
+        this.closeModalWindow();
       }
     }
   },

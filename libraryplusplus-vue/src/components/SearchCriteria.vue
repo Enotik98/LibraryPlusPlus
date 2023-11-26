@@ -9,9 +9,14 @@
     </div>
     <div class="criteria-year">
       <label>Year</label>
-      <div class="range-year">
-        <input v-model="params.minYear" class="form-control" placeholder="From">
-        <input v-model="params.maxYear" class="form-control" placeholder="To">
+      <div class="year">
+        <div class="year__slider">
+        <Slider v-model="params.year" :min="1500" :max="2023" />
+        </div>
+        <div class="range-year">
+          <input v-model="params.year[0]" class="form-control" placeholder="From">
+          <input v-model="params.year[1]" class="form-control" placeholder="To">
+        </div>
       </div>
     </div>
     <div class="criteria-author">
@@ -20,13 +25,10 @@
     </div>
     <div class="criteria-genre">
       <label>Genre</label>
-<!--      <div>-->
-<!--        <VueMultiselect v-model="multiSelectValue" :options="options"></VueMultiselect>-->
-<!--      </div>-->
-      <select v-model="params.genre" class="form-select">
-        <option value="comedy">Comedy</option>
-        <option value="fantasy">Fantasy</option>
-      </select>
+      <div>
+        <VueMultiselect v-model="params.genre" :options="options" :multiple="true"
+                        placeholder="Select Genre"></VueMultiselect>
+      </div>
     </div>
     <div>
       <button @click="clearFilter" class="btn btn-outline-dark">Clear Filter</button>
@@ -36,11 +38,12 @@
 
 <script>
 import {mapState} from "vuex";
-// import VueMultiselect from 'vue-multiselect';
+import VueMultiselect from 'vue-multiselect';
+import Slider from "@vueform/slider";
 
 export default {
   name: "SearchCriteria",
-  // components: {VueMultiselect},
+  components: {VueMultiselect, Slider},
   props: {
     searchParams: Object
   },
@@ -48,14 +51,14 @@ export default {
     return {
       params: {
         title: "",
-        minYear: 1990,
+        year: [1500, 2023],
+        minYear: 1500,
         maxYear: new Date().getFullYear(),
         author: "",
-        genre: "",
         lostBook: false,
+        genre: [],
       },
-      multiSelectValue: null,
-      options: ['Comedy', 'Drama', 'Horror', 'Fantasy']
+      options: ['Comedy', 'Horror', 'Fantasy', 'Romance', 'Contemporary', 'Mystery', 'Thriller', 'Paranormal', 'Historical fiction', 'Science Fiction', 'History', 'Travel', 'Guide', 'Motivational', "Children's"]
     }
   },
   computed: {
@@ -64,6 +67,7 @@ export default {
   watch: {
     params: {
       handler(newParams) {
+        console.log(this.params.year)
         this.$emit('apply-filters', newParams)
       },
       deep: true
@@ -74,23 +78,26 @@ export default {
       for (let key in this.params) {
         this.params[key] = "";
       }
-    }
-    // sendSearchCriteria() {
-    //   //update searchParams on HomeView
-    //   this.$emit('updateCriteria', {...this.params});
-    // }
+    },
   }
 }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
+<style src="@vueform/slider/themes/default.css"/>
 
 <style scoped>
 .search-criteria > div {
   margin-bottom: 1em;
 }
 
+.year__slider {
+  margin-top: 3em;
+  margin-bottom: .9em;
+}
+
 .range-year {
   display: flex;
   justify-content: space-between;
+  gap: 3em;
 }
 </style>

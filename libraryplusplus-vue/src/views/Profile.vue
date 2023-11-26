@@ -29,7 +29,7 @@
         <div class="personal-card" v-show="isHaveTicket">
           <label class="profile-title">Library Card</label>
           <p v-if="!isHaveTicket">You haven't created an electronic reader ticket. Please fill in all personal data fields to create a ticket.</p>
-          <LibraryCard v-else :user-info="user"/>
+          <LibraryCard v-else :user-info="user" :address="address"/>
         </div>
         <div class="personal-orders">
           <label class="profile-title">My Orders</label>
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       user: {},
+      address: {},
       isHaveTicket: true,
     }
   },
@@ -67,7 +68,7 @@ export default {
       const response = await sendRequest("/user/profile", "GET", null);
       if (response.ok) {
         this.user = await response.json();
-        console.log(this.user)
+        this.address = JSON.parse(this.user.address)
       }
     }
   }

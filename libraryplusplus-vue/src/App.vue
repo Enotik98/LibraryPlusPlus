@@ -22,6 +22,10 @@ export default {
   --background-blue: rgba(54, 74, 255, 0.10);
   --blue-opacity: rgba(54, 74, 255, 0.75);
 
+  --slider-connect-bg: #000;
+  --slider-tooltip-bg: #000;
+  --slider-handle-ring-color: #000;
+
   height: 100vh;
 }
 html, body {
@@ -31,6 +35,19 @@ html, body {
 }
 .main-body {
   padding-bottom: 5em;
+}
+.multiselect__tag {
+  background: #000000 !important;
+}
+.multiselect__tag-icon::after {
+ color: #ffffff !important;
+}
+.multiselect__option--highlight {
+  background: #000000 !important;
+}
+.multiselect__option--highlight::after {
+  background: #000000 !important;
+
 }
 .title {
   color: var(--blue-opacity);

@@ -79,7 +79,6 @@ export default {
   },
   methods: {
     updateEditUser() {
-      console.log(this.editUser)
       let checkTicket = true;
       for (const key in this.editUser) {
         if (this.user[key] === null || this.user[key] === undefined || this.user[key] === "") {
@@ -87,7 +86,6 @@ export default {
         }else {
           if (key === 'address') {
             const data = JSON.parse(this.user[key]);
-            console.log(data)
             this.address = data;
           }
         }
