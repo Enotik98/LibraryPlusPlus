@@ -3,38 +3,38 @@
     <div class="personal_body">
       <div class="body_column">
         <div class="body_column-item">
-          <label class="">First Name:</label>
-          <input v-model="editUser.first_name" type="text" class="form-control" placeholder="First Name">
+          <label class="">First Name*:</label>
+          <input v-model="editUser.first_name" type="text" class="form-control" placeholder="First Name" required maxlength="256">
         </div>
         <div class="body_column-item">
-          <label class="">Last Name:</label>
-          <input v-model="editUser.last_name" type="text" class="form-control" placeholder="Last Name">
+          <label class="">Last Name*:</label>
+          <input v-model="editUser.last_name" type="text" class="form-control" placeholder="Last Name" required maxlength="256">
         </div>
         <div class="body_column-item">
-          <label class="">Email:</label>
-          <input v-model="editUser.email" type="text" class="form-control" placeholder="Email">
+          <label class="">Email*:</label>
+          <input type="text" class="form-control" :value="editUser.email"  readonly>
         </div>
         <div class="body_column-item">
-          <label class="">Phone Number:</label>
-          <input v-model="editUser.phone" type="text" class="form-control" placeholder="0981112233" maxlength="10">
+          <label class="">Phone Number*:</label>
+          <input v-model="editUser.phone" type="text" class="form-control" placeholder="0981112233" maxlength="10" required>
         </div>
       </div>
       <div class="body_column">
         <div class="body_column-item">
-          <label class="">Apartment Number:</label>
-          <input type="text" class="form-control" placeholder="13" v-model="address.apartmentNumber">
+          <label class="">Apartment Number*:</label>
+          <input type="text" class="form-control" placeholder="13" v-model="address.apartmentNumber" required maxlength="10">
         </div>
         <div class="body_column-item">
-          <label class="">House Number:</label>
-          <input type="text" class="form-control" placeholder="6" v-model="address.houseNumber">
+          <label class="">House Number*:</label>
+          <input type="text" class="form-control" placeholder="6" v-model="address.houseNumber" required maxlength="10">
         </div>
         <div class="body_column-item">
-          <label class="">Street:</label>
-          <input type="text" class="form-control" placeholder="Teremok" v-model="address.street">
+          <label class="">Street*:</label>
+          <input type="text" class="form-control" placeholder="Teremok" v-model="address.street" required maxlength="256">
         </div>
         <div class="body_column-item">
-          <label class="">City:</label>
-          <input type="text" class="form-control" placeholder="Kiev" v-model="address.city">
+          <label class="">City*:</label>
+          <input type="text" class="form-control" placeholder="Kiev" v-model="address.city" required maxlength="256">
         </div>
       </div>
     </div>

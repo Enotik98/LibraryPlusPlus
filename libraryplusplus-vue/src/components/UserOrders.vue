@@ -3,6 +3,31 @@
   <table class="table table-hover">
     <thead>
     <tr>
+      <th scope="col">#</th>
+      <th scope="col">Book name</th>
+      <th scope="col">Author</th>
+      <th scope="col">Genre</th>
+      <th scope="col">Order date</th>
+      <th scope="col">Return date</th>
+      <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="order in orders" :key="order.id" @click="openOrderDetail(order)" :class="{'table-danger' : checkLate(order)}">
+      <td>{{ order.id }}</td>
+      <td>{{order.book.title}}</td>
+      <td>{{order.book.author}}</td>
+      <td>{{order.book.genre}}</td>
+      <td>{{formatDate(order.orderDate)}}</td>
+      <td>{{formatDate(order.return_date)}}</td>
+      <td>{{order.status}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <label v-if="requests.length" class="title">My Requests</label>
+  <table v-if="requests.length" class="table table-hover">
+    <thead>
+    <tr>
       <th>#</th>
       <th>Title</th>
       <th>Author</th>
@@ -16,33 +41,9 @@
       <td>{{requestUser.id}}</td>
       <td>{{ requestUser.order.book.title }}</td>
       <td>{{ requestUser.order.book.author }}</td>
-      <td>{{ requestUser.new_return_date }}</td>
+      <td>{{ formatDate(requestUser.new_return_date) }}</td>
       <td>{{ requestUser.status }}</td>
       <td>{{requestUser.message}}</td>
-    </tr>
-    </tbody>
-  </table>
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Book name</th>
-      <th scope="col">Author</th>
-      <th scope="col">Genre</th>
-      <th scope="col">Order date</th>
-      <th scope="col">Return date</th>
-      <th scope="col">Status</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="order in orders" :key="order.id" @click="openOrderDetail(order)">
-      <td>{{ order.id }}</td>
-      <td>{{order.book.title}}</td>
-      <td>{{order.book.author}}</td>
-      <td>{{order.book.genre}}</td>
-      <td>{{formatDate(order.orderDate)}}</td>
-      <td>{{formatDate(order.return_date)}}</td>
-      <td>{{order.status}}</td>
     </tr>
     </tbody>
   </table>
@@ -54,7 +55,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
-import {formatDate} from "../scripts/utils";
+import {checkLate, formatDate} from "../scripts/utils";
 import ModalWindow from "@/components/ModalWindow.vue";
 import OrderDetailModal from "@/components/OrderDetailModal.vue";
 
@@ -73,6 +74,7 @@ export default {
     this.getUserRequests();
   },
   methods: {
+    checkLate,
     formatDate,
     openOrderDetail(val){
       this.chooseOrder = val;
@@ -105,5 +107,8 @@ export default {
 </script>
 
 <style scoped>
-
+.table {
+  max-height: 40em;
+  overflow-y: auto;
+}
 </style>

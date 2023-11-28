@@ -1,5 +1,6 @@
 <template>
   <div class="container d-flex justify-content-center ">
+    <div class="back-link" @click="$router.go(-1)"><i class="fa-solid fa-chevron-left" style="color: #000000;"></i><span>Back</span></div>
     <div class="product">
       <!--            <img src="../assets/samuray.jpg" class="card-img-left" alt="Book">-->
       <img :src="book.path_img" class="card-img-left" alt="Book">
@@ -10,20 +11,22 @@
         <span class="card-text">Year: {{ book.publication_year }}</span>
         <span class="card-text">ISBN: {{ book.isbn }}</span>
         <span class="card-text">{{ book.about }}</span>
-        <p v-if="!isAvailable" class="warning">The book isn't available. Please try to order later</p>
-        <p v-if="isSanctions" class="warning">You account has a sanctions. For details information, contact with the
-          administrator. </p>
-        <div :class="!isAvailable ? 'disabled' : ''">
-          <p>How long</p>
-          <select class="form-select" v-model="selectDays" :disabled="!isAvailable"
-                  :class="!isAvailable ? 'disabled' : ''">
-            <option :value="7">1 week</option>
-            <option :value="14">2 week</option>
-            <option :value="21">3 week</option>
-            <option :value="30">1 month</option>
-          </select>
+        <div class="order-control">
+          <div :class="!isAvailable ? 'disabled' : ''">
+            <p>How long</p>
+            <select class="form-select" v-model="selectDays" :disabled="!isAvailable"
+                    :class="!isAvailable ? 'disabled' : ''">
+              <option :value="7">1 week</option>
+              <option :value="14">2 week</option>
+              <option :value="21">3 week</option>
+              <option :value="30">1 month</option>
+            </select>
+          </div>
+          <button class="btn btn-outline-dark" @click="createOrder" :disabled="!isAvailable">Add to Cart</button>
+          <div v-if="!isAvailable" class="form-text warning">The book isn't available. Please try to order later</div>
+          <div v-if="isSanctions" class="form-text warning">You account has a sanctions. For details information, contact with the
+            administrator. </div>
         </div>
-        <button class="btn btn-outline-dark" @click="createOrder" :disabled="!isAvailable">Add to Cart</button>
       </div>
     </div>
     <div class="edit-book" v-if="!isUser">
@@ -117,17 +120,21 @@ export default {
 
 <style scoped>
 .product {
-  width: 40em;
+  min-width: 40em;
+
   /*padding: 1em;*/
   margin-top: 3em;
   border: 1px solid rgba(0, 0, 0, 0.176);
   border-radius: 6px;
   display: flex;
 }
+.back-link {
+  margin: 3em 1em;
+}
 
 .product > img {
-  width: 40%;
-  height: 25em;
+  min-width: 20em;
+  height: 30em;
   object-fit: cover;
   border-radius: 6px 0 0 6px;
 }
@@ -150,7 +157,13 @@ export default {
 .card-title {
   font-size: 1.7em;
 }
-
+.order-control {
+  width: 70%;
+}
+.order-control > button {
+  margin-top: 1em;
+  width: 70%;
+}
 .warning {
   color: #ff4013;
 }

@@ -7,7 +7,7 @@
       <p>Email: {{ user.email }}</p>
       <p>Status: {{ order.status }}</p>
       <p v-if="order.status === 'AWAITING'">Return Date {{ formatDate(calculateDate(new Date(), selectDays) )}}</p>
-      <p v-else>Return Date: {{order.return_date}}</p>
+      <p v-else>Return Date: {{formatDate(order.return_date)}}</p>
       <div class="order_return-date">
         <span>The user wants to take the book for {{ days }} days</span>
         <select class="form-select" v-model="selectDays" v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'">

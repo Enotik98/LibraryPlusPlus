@@ -92,7 +92,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
-import {formatDate} from "../scripts/utils";
+import {checkLate, formatDate} from "../scripts/utils";
 import ModalWindow from "@/components/ModalWindow.vue";
 import ExtensionRequestModal from "@/components/ExtensionRequestModal.vue";
 
@@ -154,9 +154,7 @@ export default {
       }
       return obj;
     },
-    checkLate(order) {
-      return (order.status === 'CHECKOUT' && new Date(order.return_date) < new Date())
-    },
+    checkLate,
     formatDate,
     goToOrderPage(orderId) {
       this.$router.push({name: 'OrderInfo', params: {id: orderId}})

@@ -5,37 +5,40 @@
       <label v-else class="title-card">Edit Book</label>
       <div class="form-group">
         <label >Image</label>
-        <textarea class="form-control" type="text" v-model="book.path_img" rows="1" placeholder="Image Url"/>
+        <textarea class="form-control" type="text" v-model="book.path_img" rows="1" placeholder="Image Url" required maxlength="256"/>
       </div>
       <div>
         <label>Title</label>
-        <input class="form-control" type="text" v-model="book.title" placeholder="Title">
+        <input class="form-control" type="text" v-model="book.title" placeholder="Title" required maxlength="256">
       </div>
       <div class="form-group">
         <label>Author</label>
-        <input class="form-control" type="text" v-model="book.author" placeholder="Author">
+        <input class="form-control" type="text" v-model="book.author" placeholder="Author" maxlength="256">
       </div>
       <div class="form-group">
         <label>Genre</label>
-        <input class="form-control" type="text" v-model="book.genre" placeholder="Genre">
+        <select class="form-select" v-model="book.genre" required>
+          <option value="" selected disabled>Choose genre</option>
+          <option v-for="genre in genres" :key="genre" :value="genre">{{genre}}</option>
+        </select>
       </div>
       <div class="book-input-group">
         <div class="form-group pe-1">
           <label>ISBN</label>
-          <input class="form-control" type="text" v-model="book.isbn" placeholder="ISNB">
+          <input class="form-control" type="text" v-model="book.isbn" placeholder="ISNB" maxlength="13" required>
         </div>
         <div class="form-group px-1">
           <label>Publication Year</label>
-          <input class="form-control" type="text" v-model="book.publication_year" placeholder="Publication Year">
+          <input class="form-control" type="text" v-model="book.publication_year" placeholder="Publication Year" maxlength="4" required>
         </div>
         <div class="form-group ps-1">
           <label>Quantity</label>
-          <input class="form-control" type="text" v-model="book.quantity" placeholder="Quantity">
+          <input class="form-control" type="text" v-model="book.quantity" placeholder="Quantity" maxlength="3" required>
         </div>
       </div>
       <div class="form-group">
         <label>About</label>
-        <textarea class="form-control" type="text" v-model="book.about" rows="7" placeholder="About"/>
+        <textarea class="form-control" type="text" v-model="book.about" rows="7" placeholder="About" required/>
       </div>
       <div class="button">
         <button v-if="!editBook" type="submit" class="btn btn-outline-dark">Add Book</button>
@@ -47,6 +50,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
+import {optionsGenre} from "@/scripts/utils";
 
 export default {
   name: "CreateBook",
@@ -65,7 +69,8 @@ export default {
         publication_year: "",
         quantity: "",
         about: "",
-      }
+      },
+      genres: optionsGenre.sort((a, b) => a.localeCompare(b)),
     }
   },
   mounted() {
@@ -74,6 +79,9 @@ export default {
     }
   },
   methods: {
+    optionsGenre() {
+      return optionsGenre
+    },
     extractFileIdFromUrl(urlGoogle) {
       const match = urlGoogle.match(/\/d\/([^/]+)|[?&]id=([^&]+)/);
       if (match) {

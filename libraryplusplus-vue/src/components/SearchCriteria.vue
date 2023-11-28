@@ -40,6 +40,7 @@
 import {mapState} from "vuex";
 import VueMultiselect from 'vue-multiselect';
 import Slider from "@vueform/slider";
+import {optionsGenre} from "@/scripts/utils";
 
 export default {
   name: "SearchCriteria",
@@ -58,7 +59,7 @@ export default {
         lostBook: false,
         genre: [],
       },
-      options: ['Comedy', 'Horror', 'Fantasy', 'Romance', 'Contemporary', 'Mystery', 'Thriller', 'Paranormal', 'Historical fiction', 'Science Fiction', 'History', 'Travel', 'Guide', 'Motivational', "Children's"]
+      options: optionsGenre.sort((a, b) => a.localeCompare(b)),
     }
   },
   computed: {

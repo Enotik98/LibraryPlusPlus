@@ -68,7 +68,7 @@ export default {
       const response = await sendRequest("/user/profile", "GET", null);
       if (response.ok) {
         this.user = await response.json();
-        this.address = JSON.parse(this.user.address)
+        this.address = this.user.address ? JSON.parse(this.user.address) : "";
       }
     }
   }

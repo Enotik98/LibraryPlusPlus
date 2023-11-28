@@ -6,7 +6,7 @@
       <p>First Name: {{ user.first_name }}</p>
       <p>Last Name: {{ user.last_name }}</p>
       <p>Phone: {{ user.phone }}</p>
-      <p>Address: {{ user.address }}</p>
+      <p>Address: {{ address.city }}, St. {{ address.street }} {{ address.houseNumber }}, {{ address.apartmentNumber }}</p>
       <p>Role: {{ user.role }}</p>
     </div>
     <div class="user-control">
@@ -59,6 +59,7 @@ export default {
   props: {
     userInfo: Object,
     closeModalWindow: Function,
+    getUsers: Function,
   },
   data() {
     return {
@@ -69,6 +70,7 @@ export default {
       },
       role: this.userInfo.role,
       user: {},
+      address: {}
     }
   },
   computed: {
@@ -86,7 +88,8 @@ export default {
       } else {
         this.$Notiflix.Notify.success("Update successful!");
       }
-      await this.getUser();
+      await this.getUserInfo();
+      await this.getUsers();
     },
     async updateRole() {
       if (this.role === this.userInfo.role) {
@@ -99,15 +102,18 @@ export default {
       } else {
         this.$Notiflix.Notify.success("Update successful!");
       }
-      await this.getUser();
+      await this.getUserInfo();
+      await this.getUsers();
+
     },
-    async getUser() {
+    async getUserInfo() {
       const response = await sendRequest("/user/" + this.userInfo.id, "GET", null)
       if (!response.ok) {
         console.error(await response.text())
         return;
       }
       this.user = await response.json();
+      this.address = this.user.address ? JSON.parse(this.user.address) : "";
     },
     async deleteUser() {
       const response = await sendRequest("/user", "DELETE", {id: this.user.id})
@@ -116,6 +122,7 @@ export default {
         this.$Notiflix.Notify.failure(errorMessage);
       } else {
         this.$Notiflix.Notify.success("deleted successful!");
+        await this.getUsers();
         this.closeModalWindow();
       }
     }
