@@ -110,26 +110,25 @@ export default {
 
 .search-criteria {
   padding: 1em;
-  width: 24em;
+  flex-basis: 24em;
+  flex-shrink: 0;
 }
 
 .admin-panel {
   padding: 1em;
-  width: 24em;
+  flex-basis: 24em;
+  flex-shrink: 0;
 }
 
 .list-books {
-  /*display: flex;*/
-  /*justify-content: center;*/
-
+  flex-grow: 1;
 }
 
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
-
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, max-content));
+  gap: 2em;
 }
 
 .card-item {
