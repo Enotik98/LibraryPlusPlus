@@ -1,29 +1,23 @@
 <template>
-  <div class="card">
+  <div class="card printable">
     <div class="card_header">
-      <span class="logo">LibraryPlusPlus</span>
+
+      <img src="../assets/Logo.svg"/>
       <div class="vertical"></div>
       <div class="library-contact">
         <div>
-          <svg class="icon">
-            <use xlink:href="../assets/planet.svg#planet" ></use>
-          </svg>
+          <img src="../assets/planet.svg"/>
           <span>www.library-plus-plus.com</span>
         </div>
         <div>
-          <svg class="icon">
-            <use xlink:href="../assets/Phone.svg#Phone" ></use>
-          </svg>
+          <img src="../assets/Phone.svg"/>
           <span>+380 (73) 234 45 54</span>
         </div>
       </div>
     </div>
     <div class="card_body">
       <div class="card_qr">
-        <svg class="icon qr">
-          <use xlink:href="../assets/qr-code.svg#Group"></use>
-          ;
-        </svg>
+        <QrCode :user_id="userInfo.id"/>
       </div>
       <div class="card_content">
         <span class="name">{{userInfo.first_name}} {{userInfo.last_name}}</span>
@@ -34,16 +28,37 @@
     </div>
   </div>
   <div class="card_btn">
-    <button class="btn btn-outline-primary">Download Card</button>
+    <button class="btn btn-outline-primary" @click="() => {downloadCard(userInfo)}">Download Card</button>
   </div>
 </template>
 
 <script>
+
+import QrCode from './QrCode.vue'
+
 export default {
   name: "LibraryCard",
+  components: {QrCode},
   props: {
     userInfo: Object,
     address: Object
+  },
+  computable: {
+    
+  },
+  methods: {
+    downloadCard(user) {
+      const card = document.querySelector('.printable');
+
+      window.domtoimage.toJpeg(card).then((dataURL) => {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = dataURL;
+        downloadLink.download = user.first_name + '_' + user.last_name + '_libraryCard.jpeg';
+
+        // Trigger the download
+        downloadLink.click();
+      })
+    }
   },
   data() {
     return {
@@ -57,8 +72,7 @@ export default {
 
 <style scoped>
 .card {
-  padding: 1em;
-
+  padding: 1.5em;
   font-weight: 500;
 }
 
@@ -68,36 +82,20 @@ export default {
   padding-bottom: 1em;
 }
 
-.logo {
-  color: var(--blue);
-
-  font-family: Megrim;
-  font-size: 32px;
-  line-height: 37px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
 .vertical {
   background-color: rgba(1, 26, 251, 0.35);
   height: 2rem;
-  width: 0.0625rem;
-  margin: 0 2em;
+  width: 1px;
+  margin: 0 1.5em;
 }
-
-.library-contact,
 .card_content {
   display: flex;
   flex-direction: column;
 }
 
-.icon {
-  fill: none;
-}
-
-.library-contact > div > .icon {
-  width: 1.5em;
-  height: 1em;
+.library-contact > div {
+  display: flex;
+  gap: .5em;
 }
 .name {
   color: var(--blue-opacity);
@@ -110,13 +108,9 @@ export default {
 .address {
   padding-top: 2em;
 }
-
-.icon.qr{
-  height: 17em;
-}
-
 .card_body {
   display: flex;
+  gap: 3em;
 }
 .card_btn {
   display: flex;

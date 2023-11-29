@@ -44,7 +44,7 @@
 import UserData from "@/components/UserData.vue";
 import UserOrders from "@/components/UserOrders.vue";
 import LibraryCard from "@/components/LibraryCard.vue";
-import {sendRequest} from "@/scripts/request";
+import { sendRequest } from "@/scripts/request";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
