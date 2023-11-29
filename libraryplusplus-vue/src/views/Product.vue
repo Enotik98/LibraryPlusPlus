@@ -14,7 +14,7 @@
         <div class="order-control">
           <div :class="!isAvailable ? 'disabled' : ''">
             <p>How long</p>
-            <select class="form-select" v-model="selectDays" :disabled="!isAvailable"
+            <select class="form-select" v-model="selectDays" name="order-duration" :disabled="!isAvailable"
                     :class="!isAvailable ? 'disabled' : ''">
               <option :value="7">1 week</option>
               <option :value="14">2 week</option>
@@ -22,7 +22,7 @@
               <option :value="30">1 month</option>
             </select>
           </div>
-          <button class="btn btn-outline-dark" @click="createOrder" :disabled="!isAvailable">Add to Cart</button>
+          <button class="btn btn-outline-dark" @click="createOrder" name="order" :disabled="!isAvailable">Add to Cart</button>
           <div v-if="!isAvailable" class="form-text warning">The book isn't available. Please try to order later</div>
           <div v-if="isSanctions" class="form-text warning">You account has a sanctions. For details information, contact with the
             administrator. </div>

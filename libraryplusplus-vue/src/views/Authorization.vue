@@ -40,12 +40,12 @@
         <label class="title-card">Sign In</label>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input class="form-control" type="email" v-model="formData.email" maxlength="20">
+          <input class="form-control" type="email" name="login-email" v-model="formData.email" maxlength="20">
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
           <div class="password">
-            <input class="form-control " :type="showPassword ? 'text' : 'password'" v-model="formData.password"
+            <input class="form-control " name="login-password" :type="showPassword ? 'text' : 'password'" v-model="formData.password"
                    maxlength="20">
             <span @click="showPassword = togglePasswordVisible(showPassword)">
               <i v-if="showPassword" class="fas fa-eye-slash"></i>
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="button">
-          <button class="btn btn-outline-primary" type="submit">Sign In</button>
+          <button class="btn btn-outline-primary" type="submit" name="login">Sign In</button>
         </div>
       </form>
     </div>

@@ -35,9 +35,12 @@ export default {
   width: 100%;
   height: 20em;
   object-fit: cover;
+  object-position: center top;
 }
 
 .card-body {
+  display: flex;
+  flex-direction: column;
   padding: .5em;
   position: relative;
 }
@@ -45,16 +48,16 @@ export default {
 .card_header {
   display: flex;
   justify-content: space-between;
-  font-size: 1rem;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .card_title {
-  font-size: 1.25rem;
+  font-size: 16pt;
 }
 
 .card_text {
+  flex-grow: 1;
   color: rgba(0, 0, 0, 0.50);
 }
 
@@ -66,7 +69,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-top: auto;
-  font-size: .9em;
+  font-size: 10pt;
   align-items: flex-end;
   /*bottom: 0;*/
 }

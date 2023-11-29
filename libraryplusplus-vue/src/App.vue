@@ -27,6 +27,7 @@ export default {
   --slider-handle-ring-color: #000;
 
   height: 100vh;
+  font-size: 12pt;
 }
 html, body {
   margin: 0;
@@ -51,7 +52,7 @@ html, body {
 }
 .title {
   color: var(--blue-opacity);
-  font-size: 1.5rem;
+  font-size: 32pt;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
