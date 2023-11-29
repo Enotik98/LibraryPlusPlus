@@ -39,8 +39,8 @@
           <tbody>
           <tr>
             <td class="td-id"><input type="text" v-model="filterOrder.id" placeholder="#" class="form-control"></td>
-            <td><input type="text" v-model="filterOrder.email" placeholder="email" class="form-control"></td>
-            <td><input type="text" v-model="filterOrder.title" placeholder="title" class="form-control"></td>
+            <td><input type="text" v-model="filterOrder.email" placeholder="Email" class="form-control"></td>
+            <td><input type="text" v-model="filterOrder.title" placeholder="Title" class="form-control"></td>
             <td colspan="2">
               <select v-model="filterOrder.status" class="form-select">
                 <option value="">Choose Status</option>

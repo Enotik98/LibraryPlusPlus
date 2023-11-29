@@ -137,7 +137,9 @@ public class UserService {
 
     public boolean isUserHaveTicket(User user) {
         return user.getFirst_name() == null || user.getLast_name() == null ||
-                user.getPhone() == null || user.getAddress() == null;
+                user.getPhone() == null || user.getAddress() == null ||
+                user.getFirst_name().isEmpty() || user.getLast_name().isEmpty() ||
+                user.getPhone().isEmpty() || user.getAddress().isEmpty();
     }
 
 

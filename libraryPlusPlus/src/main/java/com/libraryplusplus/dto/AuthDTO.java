@@ -1,5 +1,6 @@
 package com.libraryplusplus.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.libraryplusplus.entity.User;
 import com.libraryplusplus.utils.PasswordUtils;
 import lombok.Data;
@@ -12,10 +13,10 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class AuthDTO {
     @NotEmpty(message = "Email mustn't be empty.")
-    @Pattern(regexp = "^[^\\s]+$", message = "Email can't contain spaces")
+    @Pattern(regexp = "^[^\\s]+$", message = "Email can't contain spaces.")
     private String email;
     @NotEmpty(message = "Password mustn't be empty.")
-    @Pattern(regexp = "^[^\\s]+$", message = "Password can't contain spaces")
+    @Pattern(regexp = "^[^\\s]+$", message = "Password can't contain spaces.")
     private String password;
 
     public User ConvertToUser(){

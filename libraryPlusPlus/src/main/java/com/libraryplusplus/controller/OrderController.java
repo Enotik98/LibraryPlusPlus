@@ -72,6 +72,7 @@ public class OrderController {
             int userId = Integer.parseInt(authentication.getName());
 
             orderDTO.setUser_id(userId);
+            System.out.println(orderDTO);
             orderService.addOrder(orderDTO);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException FormatException) {

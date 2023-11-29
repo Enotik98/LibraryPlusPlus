@@ -8,9 +8,9 @@
       <p>Status: {{ order.status }}</p>
       <p v-if="order.status === 'AWAITING'">Return Date {{ formatDate(calculateDate(new Date(), selectDays) )}}</p>
       <p v-else>Return Date: {{formatDate(order.return_date)}}</p>
-      <div class="order_return-date">
+      <div class="order_return-date" v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'">
         <span>The user wants to take the book for {{ days }} days</span>
-        <select class="form-select" v-model="selectDays" v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'">
+        <select class="form-select" v-model="selectDays">
           <option :value="days" selected >Change period</option>
           <option :value="7">1 week</option>
           <option :value="14">2 week</option>
@@ -20,8 +20,8 @@
       </div>
       <div v-if="order.status !== 'RETURNED' && order.status !== 'LOST'" class="order_control">
         <button @click="updateStatusOrder" v-if="userRole !== 'ADMIN'" class="btn btn-dark">Change Status</button>
-        <button v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'" @click="cancelOrder" class="btn btn-outline-danger">Cancel order</button>
-        <button @click="addLostBook" class="btn btn-outline-dark" >Lost Book</button>
+        <button v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'" @click="cancelOrder" class="btn btn-outline-danger">Cancel Order</button>
+        <button @click="addLostBook" class="btn btn-outline-dark" >Add Lost Book</button>
       </div>
     </div>
   </div>

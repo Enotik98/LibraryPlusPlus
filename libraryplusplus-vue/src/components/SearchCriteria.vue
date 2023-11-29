@@ -52,7 +52,7 @@ export default {
     return {
       params: {
         title: "",
-        year: [1500, 2023],
+        year: [1500, new Date().getFullYear()],
         minYear: 1500,
         maxYear: new Date().getFullYear(),
         author: "",
@@ -79,6 +79,7 @@ export default {
       for (let key in this.params) {
         this.params[key] = "";
       }
+      this.params.year = [1500, new Date().getFullYear()]
     },
   }
 }

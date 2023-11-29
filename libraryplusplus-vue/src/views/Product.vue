@@ -109,9 +109,10 @@ export default {
       const response = await sendRequest("/book", "DELETE", {id: this.book.id});
       if (!response.ok) {
         this.errorMess = await response.text();
-        this.$Notifix.Notify.failure(this.errorMess);
+        this.$Notiflix.Notify.failure(this.errorMess);
+        return
       }
-      this.$Notifix.Notify.success("Deleted successful!");
+      this.$Notiflix.Notify.success("Deleted successful!");
       this.$router.go(-1);
     }
   }

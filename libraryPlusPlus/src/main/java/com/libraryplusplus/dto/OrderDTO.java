@@ -1,5 +1,6 @@
 package com.libraryplusplus.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.libraryplusplus.entity.Book;
 import com.libraryplusplus.entity.Order;
 import com.libraryplusplus.entity.Status;

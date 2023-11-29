@@ -79,14 +79,14 @@ public class OrderService {
         try {
             User user = userRepository.findById(orderDTO.getUser_id());
             if (user.getIsSanctions()) {
-                throw new CustomException(HttpStatus.FORBIDDEN, "You have sanctions, please contact the administrator for detail information");
+                throw new CustomException(HttpStatus.FORBIDDEN, "You have sanctions, please contact the administrator for detail information.");
             }
             if (userService.isUserHaveTicket(user)) {
-                throw new CustomException(HttpStatus.FORBIDDEN, "We don't have a generated electronic library card. Please, go to the profile");
+                throw new CustomException(HttpStatus.FORBIDDEN, "We don't have a generated electronic library card. Please, go to the profile.");
             }
             Book book = bookRepository.findById(orderDTO.getBook_id());
             if (!bookService.isAvailable(book)) {
-                throw new CustomException(HttpStatus.NOT_FOUND, "There aren't copies available to order");
+                throw new CustomException(HttpStatus.NOT_FOUND, "There aren't copies available to order.");
             }
             Order order = orderDTO.ConvertToOrder(user, book);
             order.setStatus(Status.AWAITING);
