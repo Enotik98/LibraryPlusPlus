@@ -114,6 +114,12 @@ export default {
 </script>
 
 <style scoped>
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
 .personal_body {
   display: flex;
   flex-wrap: wrap;

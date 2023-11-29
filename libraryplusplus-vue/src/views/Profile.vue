@@ -81,6 +81,12 @@ export default {
   display: flex;
 }
 
+@media (max-width: 1000px) {
+  .profile-menu {
+    display: none;
+  }
+}
+
 .profile-menu {
   padding: 1em;
   width: 20em;
@@ -90,8 +96,17 @@ export default {
 }
 
 .profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
   width: 100%;
-  padding: 1.5em;
+  padding: 2em;
+}
+
+.profile-body > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
 }
 
 .menu-item {
