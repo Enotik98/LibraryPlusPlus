@@ -81,7 +81,7 @@ header {
   color: var(--blue);
 
   font-family: Megrim;
-  font-size: 32px;
+  font-size: 24pt;
   font-weight: 500;
   line-height: 37px;
   letter-spacing: 0em;

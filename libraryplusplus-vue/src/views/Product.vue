@@ -156,7 +156,7 @@ export default {
 }
 
 .card-title {
-  font-size: 1.7em;
+  font-size: 16pt;
 }
 .order-control {
   width: 70%;

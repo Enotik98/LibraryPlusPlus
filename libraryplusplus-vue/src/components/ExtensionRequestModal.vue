@@ -85,10 +85,6 @@ export default {
   width: 30em;
 }
 
-.request > div {
-  font-size: 1.1rem;
-}
-
 .request p {
   padding: .3rem 0;
   margin: 0;

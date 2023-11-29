@@ -66,6 +66,11 @@ html, body {
   /*text-align: center;*/
   /*color: #2c3e50;*/
 }
+
+.btn {
+  white-space: nowrap;
+}
+
 </style>
 <script setup>
 import Header from "@/components/Header.vue";

@@ -1,5 +1,5 @@
 <template>
-  <div class="body container">
+  <div class="body">
     <div class="search-criteria">
       <SearchCriteria @apply-filters="applyFilterBook"/>
     </div>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="admin-panel" v-if="!isUser">
-      <button @click="openModal" class="btn btn-outline-dark">Add Book</button>
+      <button @click="openModal" class="btn btn-outline-dark button">Add Book</button>
     </div>
   </div>
   <ModalWindow ref="ModalWindow">
@@ -110,11 +110,12 @@ export default {
 
 .search-criteria {
   padding: 1em;
-  width: 21rem;
+  width: 24em;
 }
 
 .admin-panel {
   padding: 1em;
+  width: 24em;
 }
 
 .list-books {

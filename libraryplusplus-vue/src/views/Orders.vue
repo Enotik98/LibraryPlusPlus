@@ -65,8 +65,8 @@
             <td>
               <div v-if="order.status === 'RETURNED' ">
                 <i v-if="order.returnedLate" class="fa-regular fa-calendar-xmark"
-                   style="color: #ff4013; font-size: 1.4rem"></i>
-                <i v-else class="fa-regular fa-calendar-check" style="color: #96d35f; font-size: 1.4rem"></i>
+                   style="color: #ff4013; font-size: 16pt"></i>
+                <i v-else class="fa-regular fa-calendar-check" style="color: #96d35f; font-size: 16pt"></i>
               </div>
             </td>
           </tr>
@@ -193,7 +193,7 @@ export default {
 }
 .title {
   color: var(--blue-opacity);
-  font-size: 1.5rem;
+  font-size: 16pt;
   font-style: normal;
   font-weight: 500;
   line-height: normal;

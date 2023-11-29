@@ -99,7 +99,7 @@ export default {
 }
 .name {
   color: var(--blue-opacity);
-  font-size: 2rem;
+  font-size: 24pt;
 }
 .info {
   color: var(--blue);

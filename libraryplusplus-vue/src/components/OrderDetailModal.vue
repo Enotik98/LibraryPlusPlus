@@ -104,7 +104,7 @@ export default {
   margin-bottom: .5rem;
 }
 .order__body > div >.title {
-  font-size: 1.2rem;
+  font-size: 16pt;
 }
 .order_cancel {
   display: flex;

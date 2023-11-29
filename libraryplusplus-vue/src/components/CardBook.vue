@@ -4,11 +4,13 @@
     <div class="card-body">
       <div class="card_header">
         <span class="card_title">{{ book.title }}</span>
-        <span class="">{{ book.author }}</span>
       </div>
       <div class="card_text">
-        <span class="card_year">{{ book.publication_year }}</span>
-        <span class=""> {{ book.genre }}</span>
+        <div>
+          <span class="card_year">{{ book.publication_year }}</span>
+          <span class="card_genre"> {{ book.genre }}</span>
+        </div>
+        <span class="card_author">{{ book.author }}</span>
       </div>
       <div class="card_footer">
         <router-link :to="{name: 'Product', params: {id: book.id}}" >More information</router-link>
@@ -28,7 +30,8 @@ export default {
 
 <style scoped>
 .card {
-  height: 100%;
+  width: 300px;
+  height: 400px;
   position: relative;
 }
 .img {
@@ -42,6 +45,10 @@ export default {
   display: flex;
   flex-direction: column;
   padding: .5em;
+  height: 20%;
+
+  font-size: .75em;
+
   position: relative;
 }
 
@@ -53,24 +60,30 @@ export default {
 }
 
 .card_title {
-  font-size: 16pt;
+  font-size: 12pt;
+}
+
+.card_author {
+  color: black;
 }
 
 .card_text {
+  display: flex;
+  justify-content: space-between;
   flex-grow: 1;
-  color: rgba(0, 0, 0, 0.50);
 }
 
-.card_year {
-  padding-right: 1em;
+.card_text > div {
+  display: flex;
+  gap: 1em;
+  color: rgba(0, 0, 0, 0.50);
 }
 
 .card_footer {
   display: flex;
   justify-content: flex-end;
   margin-top: auto;
-  font-size: 10pt;
+  font-size: 8pt;
   align-items: flex-end;
-  /*bottom: 0;*/
 }
 </style>

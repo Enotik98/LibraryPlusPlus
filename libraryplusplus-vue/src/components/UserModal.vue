@@ -137,7 +137,6 @@ export default {
   padding: 0 1.5em;
 
   display: flex;
-  font-size: 1.2em;
   /*justify-content: space-between;*/
 }
 
@@ -152,7 +151,6 @@ export default {
 }
 
 .user-control .title {
-  font-size: 1em;
   padding: 2em 0 .5em;
 }
 

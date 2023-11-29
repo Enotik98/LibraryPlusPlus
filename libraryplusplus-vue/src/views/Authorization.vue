@@ -218,7 +218,7 @@ export default {
   text-align: center;
   width: 100%;
   font-family: 'Jim Nightshade', cursive;
-  font-size: 48px;
+  font-size: 32pt;
 }
 
 .form-group {
@@ -247,7 +247,6 @@ export default {
 
 .button button {
   width: 10em;
-  font-size: 18px;
 }
 
 </style>

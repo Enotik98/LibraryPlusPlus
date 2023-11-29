@@ -121,7 +121,6 @@ export default {
   padding: 0 1em;
   color: #000;
   /*font-family: Inter,serif;*/
-  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -129,7 +128,7 @@ export default {
 }
 
 .title-card {
-  font-size: 1.2em;
+  font-size: 16pt;
 }
 .book-input-group {
   display: flex;

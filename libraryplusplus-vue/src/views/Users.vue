@@ -27,8 +27,8 @@
         <td>{{ user.last_name }}</td>
         <td>{{user.phone}}</td>
         <td>
-          <i v-if="(user.isSanctions || user.isBlocked)" class="fa-solid fa-circle-xmark" style="color: #ff8c82; font-size: 1.3rem"></i>
-          <i v-else class="fa-solid fa-circle-check" style="color: #96d35f; font-size: 1.3rem"></i>
+          <i v-if="(user.isSanctions || user.isBlocked)" class="fa-solid fa-circle-xmark" style="color: #ff8c82; font-size: 16pt"></i>
+          <i v-else class="fa-solid fa-circle-check" style="color: #96d35f; font-size: 16pt"></i>
         </td>
       </tr>
       </tbody>

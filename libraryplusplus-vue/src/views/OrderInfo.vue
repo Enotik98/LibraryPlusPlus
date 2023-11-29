@@ -154,7 +154,7 @@ export default {
 }
 .title {
   color: var(--blue-opacity);
-  font-size: 1.5rem;
+  font-size: 16pt;
   font-style: normal;
   font-weight: 500;
   line-height: normal;

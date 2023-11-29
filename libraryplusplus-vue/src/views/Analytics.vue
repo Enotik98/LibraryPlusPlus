@@ -125,7 +125,7 @@ export default {
   padding-top: 1em;
 
   color: var(--blue-opacity);
-  font-size: 1.5rem;
+  font-size: 16pt;
   font-weight: 500;
 }
 
