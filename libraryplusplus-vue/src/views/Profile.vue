@@ -6,7 +6,7 @@
           <label class="profile-title">Personal Data</label>
           <UserData :user="user" @updateUserInfo="getUserInfo" @checkTicket="checkTicket"/>
         </div>
-        <div class="personal-card" v-show="isHaveTicket">
+        <div class="personal-card">
           <label class="profile-title">Library Card</label>
           <p v-if="!isHaveTicket">You haven't created an electronic reader ticket. Please fill in all personal data fields to create a ticket.</p>
           <LibraryCard v-else :user-info="user" :address="address"/>

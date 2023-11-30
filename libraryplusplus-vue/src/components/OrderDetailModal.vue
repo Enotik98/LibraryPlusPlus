@@ -41,6 +41,8 @@ export default {
   props: {
     order: Object,
     closeModalWindow: Function,
+    updateRequests: Function,
+    updateOrders: Function,
   },
   data() {
     return {
@@ -64,6 +66,7 @@ export default {
         const errorMessage = await response.text();
         this.$Notiflix.Notify.failure(errorMessage);
       } else {
+        this.updateRequests();
         this.$Notiflix.Notify.success("Successful!")
         this.closeModalWindow();
       }
@@ -75,6 +78,7 @@ export default {
         const errorMessage = await response.text();
         this.$Notiflix.Notify.failure(errorMessage);
       } else {
+        this.updateOrders();
         this.$Notiflix.Notify.success("Successful!")
         this.closeModalWindow();
       }

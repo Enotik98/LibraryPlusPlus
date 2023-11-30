@@ -24,9 +24,9 @@
               <option :value="30">1 month</option>
             </select>
           </div>
-          <button class="btn btn-outline-dark" @click="createOrder" name="order" :disabled="!isAvailable">Add to Cart</button>
+          <button class="btn btn-outline-dark" @click="createOrder" name="order" :disabled="!isAvailable">Add To Cart</button>
           <div v-if="!isAvailable" class="form-text warning">The book isn't available. Please try to order later</div>
-          <div v-if="isSanctions" class="form-text warning">You account has a sanctions. For details information, contact with the
+          <div v-if="isSanctions && isLoggedIn" class="form-text warning">You account has a sanctions. For details information, contact with the
             administrator. </div>
         </div>
       </div>
@@ -90,7 +90,11 @@ export default {
       }
     },
     async createOrder() {
-      if (!this.isLoggedIn) this.$router.push('/login')
+      if (!this.isLoggedIn) {
+        this.$Notiflix.Notify.info("To create an order, you need to log in to your account, go to your accoutn.")
+        this.$router.push('/login')
+        return;
+      }
       this.order.book_id = this.$route.params.id
       this.order.return_date = calculateDate(new Date, this.selectDays);
       if (this.order.book_id === "" || this.order.return_date === "") {

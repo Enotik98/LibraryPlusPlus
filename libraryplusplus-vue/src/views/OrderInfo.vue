@@ -20,8 +20,8 @@
       </div>
       <div v-if="order.status !== 'RETURNED' && order.status !== 'LOST'" class="order_control">
         <button @click="updateStatusOrder" v-if="userRole !== 'ADMIN'" class="btn btn-dark">Change Status</button>
+        <button @click="addLostBook" class="btn btn-outline-dark" v-if="userRole !== 'ADMIN'">Add Lost Book</button>
         <button v-if="order.status === 'AWAITING' && userRole !== 'ADMIN'" @click="cancelOrder" class="btn btn-outline-danger">Cancel Order</button>
-        <button @click="addLostBook" class="btn btn-outline-dark" >Add Lost Book</button>
       </div>
     </div>
   </div>

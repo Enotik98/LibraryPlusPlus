@@ -11,7 +11,7 @@
           <input v-model="editUser.last_name" type="text" class="form-control" placeholder="Last Name" required maxlength="256">
         </div>
         <div class="body_column-item">
-          <label class="">Email*:</label>
+          <label class="">Email:</label>
           <input type="text" class="form-control" :value="editUser.email"  readonly>
         </div>
         <div class="body_column-item">
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="personal_btn">
-      <button class="btn btn-outline-primary" type="submit">Save Change</button>
+      <button class="btn btn-outline-primary" type="submit">Save</button>
     </div>
   </form>
 </template>
@@ -97,7 +97,6 @@ export default {
     },
     async updateUser() {
       this.editUser.address = JSON.stringify(this.address);
-      console.log(this.address)
       const response = await sendRequest("/user/ticket", "PUT", this.editUser);
       if (response.ok) {
         this.updateEditUser();

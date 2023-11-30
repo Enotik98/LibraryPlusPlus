@@ -49,7 +49,7 @@
   </table>
 </div>
   <ModalWindow ref="ModalWindow">
-    <OrderDetailModal :order="chooseOrder" :close-modal-window="() => { this.$refs.ModalWindow.closeModal() }"/>
+    <OrderDetailModal :order="chooseOrder" :close-modal-window="() => { this.$refs.ModalWindow.closeModal() }" :update-orders="getUserOrders" :update-requests="getUserRequests"/>
   </ModalWindow>
 </template>
 

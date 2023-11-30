@@ -64,7 +64,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email!");
             }
             if (user.getIsBlocked()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked!");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked! Please contact the administrator for detail information.");
             }
             if (PasswordUtils.verifyPassword(authDTO.getPassword(), user.getPassword())) {
                 response.put("Token", TokenUtils.generateAccessToken(user.getId(), user.getRole()));

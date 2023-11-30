@@ -23,7 +23,7 @@
           <label>Blocked</label>
         </div>
         <div>
-          <button @click="updateRestriction" class="btn">Save Restrictions</button>
+          <button @click="updateRestriction" class="btn btn-outline-primary">Save Restrictions</button>
         </div>
       </div>
       <div v-if="userRole === 'ADMIN'">
@@ -42,7 +42,7 @@
             <label class="form-check-label">Admin</label>
           </div>
         </div>
-        <button @click="updateRole" class="btn">Save Role</button>
+        <button @click="updateRole" class="btn btn-outline-primary">Save Role</button>
         <button @click="deleteUser" class="btn btn-outline-danger">Delete</button>
       </div>
     </div>
@@ -78,6 +78,7 @@ export default {
   },
   mounted() {
     this.user = this.userInfo
+    this.address = this.user.address ? JSON.parse(this.user.address) : "";
   },
   methods: {
     async updateRestriction() {
@@ -85,6 +86,7 @@ export default {
       if (!response.ok) {
         const errorMessage = await response.text();
         this.$Notiflix.Notify.failure(errorMessage);
+        return;
       } else {
         this.$Notiflix.Notify.success("Update successful!");
       }
@@ -99,6 +101,7 @@ export default {
       if (!response.ok) {
         const errorMessage = await response.text();
         this.$Notiflix.Notify.failure(errorMessage);
+        return;
       } else {
         this.$Notiflix.Notify.success("Update successful!");
       }
@@ -114,6 +117,7 @@ export default {
       }
       this.user = await response.json();
       this.address = this.user.address ? JSON.parse(this.user.address) : "";
+      console.log(this.address)
     },
     async deleteUser() {
       const response = await sendRequest("/user", "DELETE", {id: this.user.id})
@@ -146,18 +150,19 @@ export default {
 }
 
 .user-control {
-  width: 50%;
+  width: 60%;
   padding-left: 10em;
 }
 
 .user-control .title {
   padding: 2em 0 .5em;
+  font-size: 16pt;
 }
 
 .user-control button {
   width: 100%;
   margin: .5em 0;
-  background: var(--blue-opacity);
-  color: #ffffff;
+  /*background: var(--blue-opacity);*/
+  /*color: #ffffff;*/
 }
 </style>

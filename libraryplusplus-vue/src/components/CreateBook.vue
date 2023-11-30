@@ -4,19 +4,19 @@
       <label v-if="!editBook" class="title-card">Add Book</label>
       <label v-else class="title-card">Edit Book</label>
       <div class="form-group">
-        <label >Image</label>
+        <label >Image*</label>
         <textarea class="form-control" type="text" v-model="book.path_img" rows="1" placeholder="Image Url" required maxlength="256"/>
       </div>
       <div>
-        <label>Title</label>
+        <label>Title*</label>
         <input class="form-control" type="text" v-model="book.title" placeholder="Title" required maxlength="256">
       </div>
       <div class="form-group">
-        <label>Author</label>
+        <label>Author*</label>
         <input class="form-control" type="text" v-model="book.author" placeholder="Author" maxlength="256">
       </div>
       <div class="form-group">
-        <label>Genre</label>
+        <label>Genre*</label>
         <select class="form-select" v-model="book.genre" required>
           <option value="" selected disabled>Choose genre</option>
           <option v-for="genre in genres" :key="genre" :value="genre">{{genre}}</option>
@@ -24,20 +24,20 @@
       </div>
       <div class="book-input-group">
         <div class="form-group pe-1">
-          <label>ISBN</label>
+          <label>ISBN*</label>
           <input class="form-control" type="text" v-model="book.isbn" placeholder="ISNB" maxlength="13" required>
         </div>
         <div class="form-group px-1">
-          <label>Publication Year</label>
+          <label>Publication Year*</label>
           <input class="form-control" type="text" v-model="book.publication_year" placeholder="Publication Year" maxlength="4" required>
         </div>
         <div class="form-group ps-1">
-          <label>Quantity</label>
+          <label>Quantity*</label>
           <input class="form-control" type="text" v-model="book.quantity" placeholder="Quantity" maxlength="3" required>
         </div>
       </div>
       <div class="form-group">
-        <label>About</label>
+        <label>About*</label>
         <textarea class="form-control" type="text" v-model="book.about" rows="7" placeholder="About" required/>
       </div>
       <div class="button">

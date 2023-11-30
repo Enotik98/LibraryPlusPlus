@@ -9,9 +9,9 @@
       <p>Status: {{ extensionRequest.status }}</p>
       <div>
         <span>Message: {{ extensionRequest.message }}</span>
-        <input class="form-control mt-2" v-model="mess" placeholder="Response">
+        <input class="form-control mt-2" v-model="mess" placeholder="Response" v-if="userRole === 'LIBRARIAN'">
       </div>
-      <div class="request-control">
+      <div class="request-control" v-if="userRole === 'LIBRARIAN'">
         <button @click="updateRequest('Confirm')" class="btn btn-success">Confirm</button>
         <button @click="updateRequest('Cancel')" class="btn btn-outline-danger">Cancel</button>
       </div>
@@ -22,6 +22,7 @@
 
 <script>
 import {sendRequest} from "@/scripts/request";
+import {mapState} from "vuex";
 
 export default {
   name: "ExtensionRequestModal",
@@ -43,7 +44,8 @@ export default {
       }
     }
   },
-  mounted() {
+  computed:{
+    ...mapState(['userRole'])
   },
   methods: {
     async updateRequest(status) {
@@ -84,7 +86,9 @@ export default {
 .request {
   width: 30em;
 }
-
+.title {
+  font-size: 16pt;
+}
 .request p {
   padding: .3rem 0;
   margin: 0;
