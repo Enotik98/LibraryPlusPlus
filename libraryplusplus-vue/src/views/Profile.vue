@@ -1,26 +1,6 @@
 <template>
   <div class="">
     <div class="body container">
-      <div class="profile-menu">
-        <div class="menu-item">
-          <svg class="icon">
-            <use href="../assets/user.svg#user"/>
-          </svg>
-          <span>Personal Data</span>
-        </div>
-        <div class="menu-item">
-          <svg class="icon">
-            <use xlink:href="../assets/Card.svg#Card" style="vertical-align: center"/>
-          </svg>
-          <span>Library Card</span>
-        </div>
-        <div class="menu-item">
-          <svg class="icon">
-            <use href="../assets/list.svg#list"/>
-          </svg>
-          <span>My Orders</span>
-        </div>
-      </div>
       <div class="profile-body">
         <div class="personal-data">
           <label class="profile-title">Personal Data</label>
@@ -80,21 +60,6 @@ export default {
 .body {
   display: flex;
 }
-
-@media (max-width: 1000px) {
-  .profile-menu {
-    display: none;
-  }
-}
-
-.profile-menu {
-  padding: 1em;
-  width: 20em;
-  overflow-y: auto;
-  border-right: 1px solid rgba(1, 26, 251, 0.35);
-
-}
-
 .profile-body {
   display: flex;
   flex-direction: column;
@@ -107,24 +72,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-
-  padding: 0.5rem .7em;
-  margin-bottom: 1em;
-  border-radius: .25rem;
-  color: var(--blue);
-  background-color: var(--background-blue);
-}
-
-.icon {
-  width: 2em;
-  height: 1.7rem;
-
-  fill: none;
 }
 
 .profile-title {

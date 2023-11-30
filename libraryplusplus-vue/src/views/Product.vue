@@ -6,14 +6,16 @@
       <img :src="book.path_img" class="card-img-left" alt="Book">
       <div class="product_body">
         <span class="card-title">{{ book.title }}</span>
-        <span class="card-text">Author: {{ book.author }}</span>
-        <span class="card-text">Genre: {{ book.genre }}</span>
-        <span class="card-text">Year: {{ book.publication_year }}</span>
-        <span class="card-text">ISBN: {{ book.isbn }}</span>
-        <span class="card-text">{{ book.about }}</span>
+        <div class="card-info">
+          <span class="card-text">Author: {{ book.author }}</span>
+          <span class="card-text">Genre: {{ book.genre }}</span>
+          <span class="card-text">Year: {{ book.publication_year }}</span>
+          <span class="card-text">ISBN: {{ book.isbn }}</span>
+        </div>
+        <span class="card-about">{{ book.about }}</span>
         <div class="order-control">
           <div :class="!isAvailable ? 'disabled' : ''">
-            <p>How long</p>
+            <label>Order</label>
             <select class="form-select" v-model="selectDays" name="order-duration" :disabled="!isAvailable"
                     :class="!isAvailable ? 'disabled' : ''">
               <option :value="7">1 week</option>
@@ -120,51 +122,72 @@ export default {
 </script>
 
 <style scoped>
-.product {
-  min-width: 40em;
 
-  /*padding: 1em;*/
-  margin-top: 3em;
-  border: 1px solid rgba(0, 0, 0, 0.176);
-  border-radius: 6px;
+.container {
   display: flex;
+  gap: 1em;
 }
 .back-link {
-  margin: 3em 1em;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  padding: 1.5em 0;
+}
+
+.product {
+  padding: 1.5em 0;
+  display: grid;
+  grid-template-columns: 300px auto;
+  gap: 2em;
 }
 
 .product > img {
-  min-width: 20em;
-  height: 30em;
+  width: 100%;
   object-fit: cover;
-  border-radius: 6px 0 0 6px;
+  object-position: center top;
+  border-radius: 8px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 .product_body {
-  padding: 1em;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-
-.product_body > span {
-  padding: .3em 0;
-}
-
-.product_body > div {
-  padding: .6em 0;
-}
-
 .card-title {
-  font-size: 16pt;
+  font-size: 2em;
+  margin-bottom: .5em;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2em;
+}
+.card-text {
+  color: rgba(0, 0, 0, 0.5)
+}
+
+.card-about {
+  margin-bottom: 2em;
 }
 .order-control {
   width: 70%;
+}
+
+.order-control label {
+  font-size: 1.5em;
+  margin-bottom: 1em;
 }
 .order-control > button {
   margin-top: 1em;
   width: 70%;
 }
+
+[name=order-duration] {
+  margin-bottom: 2em;
+}
+
 .warning {
   color: #ff4013;
 }
@@ -174,13 +197,13 @@ export default {
 }
 
 .edit-book {
-  margin-top: 3em;
-  padding-left: 1em;
+  padding: 1.5em 0 ;
   display: flex;
-  flex-direction: column;
+  gap: 1em;
 }
 
 .edit-book > button {
+  height: fit-content;
   width: 5em;
 }
 </style>

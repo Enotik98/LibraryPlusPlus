@@ -121,6 +121,7 @@ export default {
 }
 
 .list-books {
+  max-width: calc(100% - 48em);
   flex-grow: 1;
 }
 
