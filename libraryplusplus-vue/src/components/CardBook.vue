@@ -1,6 +1,11 @@
 <template>
   <div class="card ">
-    <img :src="book.path_img" class="card-img-top img" :alt="'Book' + book.id">
+    <div class="img-wrapper">
+      <img :src="book.path_img" class="card-img-top img" :alt="'Book' + book.id">
+      <div class="product-notification" v-if="showProductNotification">
+        <span>New proposition!</span>
+      </div>
+    </div>
     <div class="card-body">
       <div class="card_header">
         <span class="card_title">{{ book.title }}</span>
@@ -24,6 +29,14 @@ export default {
   name: "CardBook",
   props: {
     book: Object
+  },
+  computed: {
+    showProductNotification() {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 1);
+
+      return date < new Date(this.book.add_date);
+    }
   }
 }
 </script>
@@ -33,6 +46,21 @@ export default {
   width: 300px;
   height: 400px;
   position: relative;
+}
+
+.img-wrapper {
+  position: relative;
+}
+
+.product-notification {
+  position: absolute;
+  top:0;
+  right: 0;
+  background-color: white;
+  border-radius: 0 4px 0 4px;
+  padding: .5em 1em;
+  font-size: .75em;
+  color: red;
 }
 .img {
   width: 100%;
