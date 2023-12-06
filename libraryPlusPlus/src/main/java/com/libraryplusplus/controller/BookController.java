@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Map;
 
 @Controller
@@ -41,8 +43,14 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBook(@PathVariable Integer id) {
+    public ResponseEntity<?> getBook(
+            @PathVariable
+            Integer id) {
         try {
+            // Perform validation manually
+            if (id < 1 || id > 9999) {
+                return ResponseEntity.badRequest().body("Book Id must be between 1 and 9999.");
+            }
             return ResponseEntity.ok(bookService.findById(id));
         } catch (IllegalArgumentException FormatException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");

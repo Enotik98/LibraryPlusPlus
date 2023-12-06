@@ -11,10 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Data
@@ -23,13 +20,15 @@ public class OrderDTO {
     private int id;
     private int user_id;
     @NotNull(message = "Book_id is empty")
-    @Min(value = 1, message = "Book id mustn't be empty.")
+    @Min(value = 1, message = "Book id must between 1 and 9999.")
+    @Max(value = 9999, message = "Book id must between 1 and 9999.")
     private int book_id;
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     @NotNull
     @Future(message = "Field new return date was filled incorrect.")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date return_date;
     private Status status;
     private Boolean returnedLate;

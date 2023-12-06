@@ -61,7 +61,7 @@ public class AuthController {
 
             User user = userService.getByEmail(authDTO.getEmail());
             if (user == null ){
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect email!");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found!");
             }
             if (user.getIsBlocked()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account is blocked! Please contact the administrator for detail information.");

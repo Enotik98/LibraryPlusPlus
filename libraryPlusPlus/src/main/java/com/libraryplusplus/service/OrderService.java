@@ -85,6 +85,9 @@ public class OrderService {
                 throw new CustomException(HttpStatus.FORBIDDEN, "We don't have a generated electronic library card. Please, go to the profile.");
             }
             Book book = bookRepository.findById(orderDTO.getBook_id());
+            if (book == null) {
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Book not found!");
+            }
             if (!bookService.isAvailable(book)) {
                 throw new CustomException(HttpStatus.NOT_FOUND, "There aren't copies available to order.");
             }
