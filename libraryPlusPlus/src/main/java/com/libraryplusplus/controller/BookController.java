@@ -1,8 +1,10 @@
 package com.libraryplusplus.controller;
 
 import com.libraryplusplus.dto.BookDTO;
+import com.libraryplusplus.dto.GenreDTO;
 import com.libraryplusplus.dto.LostBookDTO;
 import com.libraryplusplus.service.BookService;
+import com.libraryplusplus.service.GenreService;
 import com.libraryplusplus.service.LostBookService;
 import com.libraryplusplus.utils.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class BookController {
     private final BookService bookService;
     @Autowired
     private final LostBookService lostBookService;
+    @Autowired
+    private final GenreService genreService;
 
     @GetMapping("")
     public ResponseEntity<?> getAllBook() {
@@ -143,6 +147,27 @@ public class BookController {
             return ResponseEntity.ok("delete successful");
         } catch (IllegalArgumentException numberFormatException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields have incorrect values");
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/genre")
+    public ResponseEntity<?> getAllGenre() {
+        try {
+            return ResponseEntity.ok(genreService.findAllGenre());
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
+    @PostMapping("/genre")
+    public ResponseEntity<?> addGenre(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(CustomException.bindingResultToString(bindingResult) + " Please fill correct in these fields.");
+            }
+            genreService.addGenre(genreDTO);
+            return ResponseEntity.ok("add successful");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }

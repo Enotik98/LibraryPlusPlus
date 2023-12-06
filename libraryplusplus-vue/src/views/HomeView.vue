@@ -6,12 +6,12 @@
     <div class="list-books">
       <div class="card-grid" v-if="showLostBook">
         <div v-for="lost in lostBooks" :key="lost.id" class="card-item">
-          <CardBook :book="lost.book" style="opacity: .5;"/>
+          <CardBook :book="lost.book" :genre="lost.book.genre.name" style="opacity: .5;"/>
         </div>
       </div>
       <div class="card-grid">
         <div v-for="book in filterBooks" :key="book.id" class="card-item">
-          <CardBook :book="book"/>
+          <CardBook :book="book" :genre="getGenreName(genres, book.genre)"/>
         </div>
       </div>
     </div>
@@ -20,7 +20,7 @@
     </div>
   </div>
   <ModalWindow ref="ModalWindow">
-    <CreateBook :modal-close="() => {this.$refs.ModalWindow.closeModal()}"/>
+    <CreateBook :modal-close="() => {this.$refs.ModalWindow.closeModal()}" :genres="genres"/>
   </ModalWindow>
 </template>
 
@@ -32,6 +32,7 @@ import {sendRequest} from "@/scripts/request";
 import CardBook from "@/components/CardBook.vue";
 import SearchCriteria from "@/components/SearchCriteria.vue";
 import {mapState} from "vuex";
+import {getGenreName} from "@/scripts/utils";
 
 export default {
   name: 'HomeView',
@@ -46,6 +47,7 @@ export default {
       books: [],
       lostBooks: [],
       filterBooks: [],
+      genres: [],
       showLostBook: false
     }
   },
@@ -54,11 +56,13 @@ export default {
   },
   mounted() {
     this.getBooks();
+    this.getGenres();
     if (!this.isUser) {
       this.getLostBook();
     }
   },
   methods: {
+    getGenreName,
     openModal() {
       this.$refs.ModalWindow.openModal();
     },
@@ -68,7 +72,7 @@ export default {
       if (params.title || params.year[0] || params.year[1] || params.author || params.genre.length > 0) {
         console.log(params.genre)
         result = result.filter(book => {
-          const includesGenre = params.genre.length === 0 || params.genre.some(genre => (!genre || book.genre.toLowerCase().includes(genre.toLowerCase())));
+          const includesGenre = params.genre.length === 0 || params.genre.some(genre => genre.id === book.genre);
           console.log(includesGenre)
           return (
               (!params.title || book.title.toLowerCase().includes(params.title.toLowerCase())) &&
@@ -91,16 +95,24 @@ export default {
       this.lostBooks = this.lostBooks.sort((a, b) => new Date(b.dateLost) - new Date(a.dateLost))
     },
     async getBooks() {
-        const response = await sendRequest("/book", "GET", null);
-        if (response.ok) {
-          const data = await response.json();
-          this.books = data.sort((a, b) => new Date(b.add_date) - new Date(a.add_date));
-          this.filterBooks = this.books;
-        }else {
-          console.error(await response.json())
-        }
+      const response = await sendRequest("/book", "GET", null);
+      if (response.ok) {
+        const data = await response.json();
+        this.books = data.sort((a, b) => new Date(b.add_date) - new Date(a.add_date));
+        this.filterBooks = this.books;
+      } else {
+        console.error(await response.json())
       }
-    }
+    },
+    async getGenres() {
+      const response = await sendRequest("/book/genre", "GET", null);
+      if (response.ok) {
+        this.genres = await response.json();
+      }
+      console.log(this.genres)
+    },
+  }
+
 }
 </script>
 <style scoped>

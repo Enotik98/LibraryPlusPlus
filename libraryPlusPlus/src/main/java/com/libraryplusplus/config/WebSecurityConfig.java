@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/token").permitAll()
                         .antMatchers("/book").permitAll()
                         .antMatchers("/book/{id}").permitAll()
+                        .antMatchers("/book/genre").permitAll()
 //                        .antMatchers("/order/*").permitAll()
 //                        .antMatchers("/extension-request/*").permitAll()
 //                        .antMatchers("/").permitAll()

@@ -8,7 +8,7 @@
         <span class="card-title">{{ book.title }}</span>
         <div class="card-info">
           <span class="card-text">Author: {{ book.author }}</span>
-          <span class="card-text">Genre: {{ book.genre }}</span>
+          <span class="card-text">Genre: {{ getGenreName(genres, book.genre) }}</span>
           <span class="card-text">Year: {{ book.publication_year }}</span>
           <span class="card-text">ISBN: {{ book.isbn }}</span>
         </div>
@@ -36,7 +36,7 @@
       <button class="btn btn-outline-danger" @click="deleteBook">Delete</button>
     </div>
     <ModalWindow ref="ModalWindow">
-      <CreateBook :edit-book="book" :modalClose="() => {this.$refs.ModalWindow.closeModal()}"/>
+      <CreateBook :edit-book="book" :modalClose="() => {this.$refs.ModalWindow.closeModal()}" :genres="genres"/>
     </ModalWindow>
     <!--    {{ $route.params.id }}-->
   </div>
@@ -45,7 +45,7 @@
 <script>
 import {sendRequest} from "@/scripts/request";
 // import Header from "@/components/Header.vue";
-import {calculateDate} from "@/scripts/utils";
+import {calculateDate, getGenreName} from "@/scripts/utils";
 import {mapState} from "vuex";
 import ModalWindow from "@/components/ModalWindow.vue";
 import CreateBook from "@/components/CreateBook.vue";
@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       book: {},
+      genres: [],
       selectDays: 7,
       order: {
         book_id: "",
@@ -71,8 +72,10 @@ export default {
   },
   mounted() {
     this.getBook();
+    this.getGenres();
   },
   methods: {
+    getGenreName,
     openModal() {
       this.$refs.ModalWindow.openModal();
     },
@@ -88,6 +91,13 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    },
+    async getGenres() {
+      const response = await sendRequest("/book/genre", "GET", null);
+      if (response.ok){
+        this.genres = await response.json();
+      }
+      console.log(this.genres)
     },
     async createOrder() {
       if (!this.isLoggedIn) {

@@ -26,7 +26,10 @@
     <div class="criteria-genre">
       <label>Genre</label>
       <div>
-        <VueMultiselect v-model="params.genre" :options="options" :multiple="true"
+        <VueMultiselect v-model="params.genre"
+                        label="name"
+                        track-by="name"
+                        :options="options" :multiple="true"
                         placeholder="Select Genre"></VueMultiselect>
       </div>
     </div>
@@ -40,13 +43,13 @@
 import {mapState} from "vuex";
 import VueMultiselect from 'vue-multiselect';
 import Slider from "@vueform/slider";
-import {optionsGenre} from "@/scripts/utils";
+import {sendRequest} from "@/scripts/request";
 
 export default {
   name: "SearchCriteria",
   components: {VueMultiselect, Slider},
   props: {
-    searchParams: Object
+    searchParams: Object,
   },
   data() {
     return {
@@ -59,11 +62,14 @@ export default {
         lostBook: false,
         genre: [],
       },
-      options: optionsGenre.sort((a, b) => a.localeCompare(b)),
+      options: [],
     }
   },
   computed: {
     ...mapState(['isUser'])
+  },
+  mounted() {
+    this.getGenres();
   },
   watch: {
     params: {
@@ -80,6 +86,12 @@ export default {
         this.params[key] = "";
       }
       this.params.year = [1500, new Date().getFullYear()]
+    },
+    async getGenres() {
+      const response = await sendRequest("/book/genre", "GET", null);
+      if (response.ok) {
+        this.options = await response.json();
+      }
     },
   }
 }

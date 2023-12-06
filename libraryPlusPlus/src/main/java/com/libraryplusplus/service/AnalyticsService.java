@@ -149,7 +149,7 @@ public class AnalyticsService {
                 XSSFRow row = sheet2.createRow(rowNum++);
                 row.createCell(0).setCellValue(book.getTitle());
                 row.createCell(1).setCellValue(book.getAuthor());
-                row.createCell(2).setCellValue(book.getGenre());
+                row.createCell(2).setCellValue(book.getGenre().getName());
                 row.createCell(3).setCellValue(book.getISBN());
                 row.createCell(4).setCellValue(book.getPublication_year());
                 row.createCell(5).setCellValue(String.valueOf(book.getQuantity()));

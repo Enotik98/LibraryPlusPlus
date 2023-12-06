@@ -24,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("select COUNT(o) from orders o where o.book = :book_id and o.status IN ('AWAITING', 'CHECKOUT')")
     int countTakenBook(@Param("book_id")Book book);
 
-    @Query("select b.genre as book_genre, COUNT (o.book.id) as orders_count FROM orders o JOIN books b on o.book.id = b.id WHERE o.orderDate BETWEEN :startDate AND :endDate group by b.genre ORDER BY orders_count desc")
+    @Query("select b.genre.name as book_genre, COUNT (o.book.id) as orders_count FROM orders o JOIN books b on o.book.id = b.id WHERE o.orderDate BETWEEN :startDate AND :endDate group by b.genre.name ORDER BY orders_count desc")
     List<Map<String, Integer>> getGenreReportByPeriod(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT b.title AS book_title, COUNT (o.book.id) AS orders_count FROM orders o JOIN books b ON o.book.id = b.id WHERE o.orderDate BETWEEN :startDate AND :endDate GROUP BY b.id ORDER BY orders_count DESC ")

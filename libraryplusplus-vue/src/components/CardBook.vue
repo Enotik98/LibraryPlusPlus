@@ -13,7 +13,7 @@
       <div class="card_text">
         <div>
           <span class="card_year">{{ book.publication_year }}</span>
-          <span class="card_genre"> {{ book.genre }}</span>
+          <span class="card_genre"> {{ genre }}</span>
         </div>
         <span class="card_author">{{ book.author }}</span>
       </div>
@@ -28,7 +28,8 @@
 export default {
   name: "CardBook",
   props: {
-    book: Object
+    book: Object,
+    genre: String,
   },
   computed: {
     showProductNotification() {

@@ -1,5 +1,6 @@
 package com.libraryplusplus.entity;
 
+import com.libraryplusplus.dto.BookDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,9 @@ public class Book {
     private String title;
     @Column(name = "author")
     private String author;
-    @Column(name = "genre")
-    private String genre;
+    @ManyToOne
+    @JoinColumn(name = "genre")
+    private Genre genre;
     @Column(name = "isbn")
     private String ISBN;
     @Column(name = "publication_year")

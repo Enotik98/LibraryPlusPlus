@@ -19,7 +19,7 @@
         <label>Genre*</label>
         <select class="form-select" v-model="book.genre" required>
           <option value="" selected disabled>Choose genre</option>
-          <option v-for="genre in genres" :key="genre" :value="genre">{{genre}}</option>
+          <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{genre.name}}</option>
         </select>
       </div>
       <div class="book-input-group">
@@ -57,6 +57,7 @@ export default {
   props: {
     editBook: Object,
     modalClose: Function,
+    genres: Array,
   },
   data() {
     return {
@@ -70,13 +71,15 @@ export default {
         quantity: "",
         about: "",
       },
-      genres: optionsGenre.sort((a, b) => a.localeCompare(b)),
+      listGenre: this.genres
+      // genres: optionsGenre.sort((a, b) => a.localeCompare(b)),
     }
   },
   mounted() {
     if (this.editBook != null) {
       this.book = this.editBook
     }
+    this.listGenre = this.listGenre.sort((a, b) => a.name.localeCompare(b.name))
   },
   methods: {
     optionsGenre() {

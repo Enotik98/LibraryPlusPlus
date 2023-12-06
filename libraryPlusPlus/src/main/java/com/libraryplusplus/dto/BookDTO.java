@@ -2,6 +2,7 @@ package com.libraryplusplus.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.libraryplusplus.entity.Book;
+import com.libraryplusplus.entity.Genre;
 import com.libraryplusplus.utils.CapitalizeDeserializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,9 @@ public class BookDTO {
     private String title;
     @NotEmpty(message = "Author mustn't be empty.")
     private String author;
-    @NotEmpty(message = "Genre mustn't be empty.")
-    private String genre;
+    @Min(value = 1, message = "Genre mustn't be empty.")
+    @NotNull(message = "Genre mustn't be empty.")
+    private int genre;
     @NotEmpty(message = "ISBN mustn't be empty.")
     private String ISBN;
     @Min(value = 1, message = "Publication year mustn't be empty.")
@@ -41,7 +43,7 @@ public class BookDTO {
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
         dto.setAuthor(book.getAuthor());
-        dto.setGenre(book.getGenre());
+        dto.setGenre(book.getGenre().getId());
         dto.setISBN(book.getISBN());
         dto.setPublication_year(book.getPublication_year());
         dto.setQuantity(book.getQuantity());
@@ -50,12 +52,12 @@ public class BookDTO {
         dto.setPath_img(book.getPath_img());
         return dto;
     }
-    public Book ConvertToBook(){
+    public Book ConvertToBook(Genre genre){
         Book book = new Book();
         book.setId(this.getId());
         book.setTitle(this.getTitle());
         book.setAuthor(this.getAuthor());
-        book.setGenre(this.getGenre());
+        book.setGenre(genre);
         book.setISBN(this.getISBN());
         book.setPublication_year(this.getPublication_year());
         book.setQuantity(this.getQuantity());

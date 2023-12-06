@@ -2,8 +2,10 @@ package com.libraryplusplus.service;
 
 import com.libraryplusplus.dto.BookDTO;
 import com.libraryplusplus.entity.Book;
+import com.libraryplusplus.entity.Genre;
 import com.libraryplusplus.entity.Order;
 import com.libraryplusplus.repository.BookRepository;
+import com.libraryplusplus.repository.GenreRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.utils.CustomException;
 import org.aspectj.weaver.ast.Or;
@@ -19,6 +21,8 @@ public class BookService {
     BookRepository bookRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    GenreRepository genreRepository;
 
     public List<BookDTO> findAllBook() {
         try {
@@ -58,7 +62,11 @@ public class BookService {
             if (exBook != null) {
                 throw new CustomException(HttpStatus.CONFLICT, "A book with this title already exists");
             }
-            Book book = bookDTO.ConvertToBook();
+            Genre genre = genreRepository.findById(bookDTO.getId());
+            if (genre == null){
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Genre id incorrect");
+            }
+            Book book = bookDTO.ConvertToBook(genre);
             bookRepository.save(book);
         } catch (CustomException customException) {
             throw new CustomException(customException.getStatus(), customException.getMessage());
@@ -79,7 +87,11 @@ public class BookService {
                     throw new CustomException(HttpStatus.CONFLICT, "A book with this title already exists");
                 }
             }
-            Book book = bookDTO.ConvertToBook();
+            Genre genre = genreRepository.findById(bookDTO.getId());
+            if (genre == null){
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Genre id incorrect");
+            }
+            Book book = bookDTO.ConvertToBook(genre);
             book.setAdd_date(exBook.getAdd_date());
             bookRepository.save(book);
         } catch (CustomException customException) {
