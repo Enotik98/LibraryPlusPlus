@@ -20,6 +20,9 @@
         <div v-if="downloadLink">
           <a :href="downloadLink">Download</a>
         </div>
+        <div v-if="dateList.values.length !== 0">
+          <PieChart v-if="dateList" :data-list="dateList"/>
+        </div>
       </div>
     </div>
   </div>
@@ -30,11 +33,12 @@ import * as XLSX from "xlsx";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import {sendRequest} from "@/scripts/request";
+import PieChart from "@/components/PieChart.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Analytics",
-  components: { VueDatePicker},
+  components: {PieChart, VueDatePicker},
   data() {
     return {
       date: [new Date(2023, 9, 13), new Date()],
@@ -48,6 +52,8 @@ export default {
         header: null,
         body: null,
       },
+      dateList: {labels: [], values: []},
+
       downloadLink: null,
     }
   },
@@ -61,6 +67,18 @@ export default {
       const headers = data[0];
 
       data.shift();
+      if (this.report === 'genre') {
+        let dates = {labels: [], values: []}
+        data.forEach(row => {
+          dates.labels.push(row[0]);
+          dates.values.push(row[1]);
+        })
+        this.dateList = dates;
+      } else {
+        this.dateList = {labels: [], values: []};
+      }
+
+      console.log(this.dateList)
       this.excelData.header = headers.map(header => `<th>${header}</th>`).join('');
       if (data.length !== 0) {
         this.excelData.body = data.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('');
@@ -132,6 +150,7 @@ export default {
 .analytics > button {
   margin: 1.5em 0;
 }
+
 .card {
   padding: 1em;
 }

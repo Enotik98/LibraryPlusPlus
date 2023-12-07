@@ -6,17 +6,27 @@ import com.libraryplusplus.repository.LostBookRepository;
 import com.libraryplusplus.repository.OrderRepository;
 import com.libraryplusplus.repository.UserRepository;
 import com.libraryplusplus.utils.CustomException;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.*;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.internal.chartpart.Chart;
+import org.knowm.xchart.style.Styler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class AnalyticsService {
@@ -48,9 +58,9 @@ public class AnalyticsService {
                 row.createCell(0).setCellValue(String.valueOf(reportEntry.get("book_title")));
                 row.createCell(1).setCellValue(String.valueOf(reportEntry.get("orders_count")));
             }
+
             workbook.write(outputStream);
             return outputStream;
-
         }catch (Exception e){
             throw new CustomException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -65,11 +75,39 @@ public class AnalyticsService {
             headerRow.createCell(1).setCellValue("Order Count");
 
             int rowNum = 1;
+            List<String> genres = new ArrayList<>();
+            List<Integer> orders = new ArrayList<>();
             for (Map<String, Integer> genreEntry : genreReport) {
                 XSSFRow row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(String.valueOf(genreEntry.get("book_genre")));
                 row.createCell(1).setCellValue(String.valueOf(genreEntry.get("orders_count")));
+                genres.add(String.valueOf(genreEntry.get("book_genre")));
+                orders.add(Integer.parseInt(String.valueOf(genreEntry.get("orders_count"))));
             }
+            //circle diagram
+            PieChart chart = new PieChart(800, 500);
+            chart.setTitle("Genre Report");
+
+            for (int i = 0; i < genres.size(); i++) {
+                chart.addSeries(genres.get(i), orders.get(i));
+            }
+            //column diagram
+//            CategoryChart chart = new CategoryChart(800, 500);
+//            chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideE);
+//            chart.getStyler().setHasAnnotations(true);
+//
+//            chart.addSeries("Orders Count", genres, orders);
+//
+            BufferedImage chartImage = BitmapEncoder.getBufferedImage(chart);
+
+            ByteArrayOutputStream chartOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(chartImage, "png", chartOutputStream);
+
+            Drawing<?> drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 2, 1, 10, 15);
+            int pictureIndex = workbook.addPicture(chartOutputStream.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+            drawing.createPicture(anchor, pictureIndex);
+
             workbook.write(outputStream);
             return outputStream;
 
