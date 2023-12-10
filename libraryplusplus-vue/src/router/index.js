@@ -8,6 +8,7 @@ import Product from "@/views/Product.vue";
 import Analytics from "@/views/Analytics.vue";
 import Users from "@/views/Users.vue";
 import store from "@/scripts/store";
+import Genres from "@/views/Genres.vue";
 
 const routes = [
     {
@@ -52,6 +53,12 @@ const routes = [
         component: Users,
         beforeEnter: [AdminLibrarianMiddleware, await isAuthorized]
 
+    },
+    {
+        path: '/book/_genres',
+        name: 'Genres',
+        component: Genres,
+        // beforeEnter: [await AdminLibrarianMiddleware, await isAuthorized]
     },
     // {
     //   path: '/about',
